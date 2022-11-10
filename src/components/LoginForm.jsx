@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 const LoginForm = () => {
   return (
     <>
@@ -30,8 +32,8 @@ const LoginForm = () => {
         <button
           type="button"
           className="btn bg-secondary w-[115px] hover:bg-primary hover:text-white text-primary p-2 rounded-md"
-        >
-          Inicia sesión
+        ><Link to="/admin" className="text-white hover:text-white">Iniciar sesión</Link>
+          
         </button>
       </div>
       <hr className="my-7" />
