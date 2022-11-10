@@ -4,13 +4,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#0DB1AC",
-        secondary: "#D8F6F0",
-        boxMsg: "#FEF3C7",
-        textMsg: "#D97706",
+        primary: "#002140",
+        secondary: "#59B1FF",
       },
       fontFamily: {
-        inter: ["Inter", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
       },
     },
     screens: {

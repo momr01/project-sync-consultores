@@ -1,9 +1,20 @@
-import React from 'react'
+import React from "react";
+import { LoginForm } from "../components";
 
 const Login = () => {
   return (
-    <div>Login</div>
-  )
-}
+    <>
+      <section className="container mx-auto my-10">
+        <div>
+          <h1 className="text-slate-800 font-bold mb-6 text-3xl font-poppins text-center">
+            Iniciar Sesión
+          </h1>
+        </div>
 
-export default Login
+        <LoginForm />
+      </section>
+    </>
+  );
+};
+
+export default Login;

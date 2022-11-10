@@ -1,29 +1,30 @@
 import { useState } from "react";
-import { Space, Table, Tag, Breadcrumb, Layout, Menu, Modal } from "antd";
+import { Space, Table, Layout, Menu, Modal } from "antd";
 import {
-  DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { Form } from "../components";
 
 const Admin = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [open, setOpen] = useState({ state: false, type: "" });
+  const [open, setOpen] = useState({ state: false, add: null });
 
-  const { Header, Content, Footer, Sider } = Layout;
-  function getItem(label, key, icon, children) {
+  const abrirModal = () => {
+    setOpen({state: true, add: true})
+  }
+  const { Content, Sider } = Layout;
+  function getItem(label, key, icon, items) {
     return {
       key,
       icon,
-      children,
+      items,
       label,
     };
   }
   const items = [
-    getItem("Gráfico", "1", <PieChartOutlined />),
     //getItem("Option 2", "2", <DesktopOutlined />),
     // getItem("User", "sub1", <UserOutlined />, [
     //   getItem("Tom", "3"),
@@ -35,9 +36,20 @@ const Admin = () => {
     //   getItem("Team 2", "8"),
     // ]),
     // getItem("Files", "9", <FileOutlined />),
-    getItem("Listar todos", "2", <Link to="/login"><TeamOutlined /></Link>),
-    getItem("Agregar nuevo", "3", <UserOutlined />),
+    getItem(
+      "Listar todos",
+      "1",
+      <Link to="/admin">
+        <TeamOutlined />
+      </Link>
+    ),
+    getItem("Agregar nuevo", "2", <button onClick={()=>abrirModal()}><UserOutlined /></button>),
+    //getItem("Agregar nuevo", "2", <UserOutlined />),
+    getItem("Gráfico", "3", <PieChartOutlined />)
+    
   ];
+
+  
   return (
     <>
       <Layout
@@ -68,8 +80,28 @@ const Admin = () => {
               <TableAdmin open={open} setOpen={setOpen} />
             </div>
           </Content>
+          {/* <Modal
+        centered
+        open={open.state}
+        // onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        footer={null}
+        width={1000}
+      >
+        <Form add={open.add} />
+      </Modal> */}
         </Layout>
       </Layout>
+      <Modal
+        centered
+        open={open.state}
+        // onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        footer={null}
+        width={1000}
+      >
+        <Form add={open.add} />
+      </Modal>
     </>
   );
 };
@@ -77,7 +109,7 @@ const Admin = () => {
 const HeaderAdmin = ({ open, setOpen }) => (
   <div className="flex justify-between mt-10">
     <div>
-      <h1 className="text-2xl">Lista de consultores</h1>
+      <h1 className="text-2xl font-poppins">Lista de consultores</h1>
     </div>
 
     <div>
@@ -87,7 +119,7 @@ const HeaderAdmin = ({ open, setOpen }) => (
         className="border-2 p-3 mr-2 focus:outline-primary"
       />
       <button
-        onClick={() => setOpen({ state: true, type: "add" })}
+        onClick={() => setOpen({ state: true, add: true })}
         className="btn bg-secondary p-3 rounded-md text-primary hover:text-secondary hover:bg-primary "
       >
         Añadir consultor
@@ -115,9 +147,9 @@ const TableAdmin = ({ open, setOpen }) => {
       key: "telefono",
     },
     {
-      title: "Sector",
-      dataIndex: "sector",
-      key: "sector",
+      title: "División",
+      dataIndex: "division",
+      key: "division",
     },
     {
       title: "Email",
@@ -149,10 +181,15 @@ const TableAdmin = ({ open, setOpen }) => {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <button onClick={() => setOpen({ state: true, type: "edit" })} className="btn bg-green-200 text-green-800 p-1 rounded-md hover:bg-green-800 hover:text-green-200">
+          <button
+            onClick={() => setOpen({ state: true, add: false })}
+            className="btn bg-green-200 text-green-800 p-1 rounded-md hover:bg-green-800 hover:text-green-200"
+          >
             Editar
           </button>
-          <button className="btn bg-red-200 text-red-800 p-1 rounded-md hover:bg-red-800 hover:text-red-200">Eliminar</button>
+          <button className="btn bg-red-200 text-red-800 p-1 rounded-md hover:bg-red-800 hover:text-red-200">
+            Eliminar
+          </button>
         </Space>
       ),
     },
@@ -163,7 +200,7 @@ const TableAdmin = ({ open, setOpen }) => {
       nombre: "John",
       apellido: "Brown",
       telefono: 155677789,
-      sector: "Software Factory",
+      division: "Software Factory",
       //tags: ["nice", "developer", "loser", "cool", "teacher"],
       email: "1@1.com",
     },
@@ -172,7 +209,7 @@ const TableAdmin = ({ open, setOpen }) => {
       nombre: "Jim",
       apellido: "Green",
       telefono: 155677789,
-      sector: "Software Factory",
+      division: "Software Factory",
       //tags: ["nice", "developer"],
       email: "1@1.com",
     },
@@ -181,7 +218,7 @@ const TableAdmin = ({ open, setOpen }) => {
       nombre: "John",
       apellido: "Brown",
       telefono: 155677789,
-      sector: "SAP",
+      division: "SAP",
       //tags: ["nice", "developer"],
       email: "1@1.com",
     },
@@ -190,7 +227,7 @@ const TableAdmin = ({ open, setOpen }) => {
       nombre: "Joe",
       apellido: "Black",
       telefono: 155677789,
-      sector: "SAP",
+      division: "SAP",
       //tags: ["nice", "developer"],
       email: "1@1.com",
     },
@@ -200,19 +237,19 @@ const TableAdmin = ({ open, setOpen }) => {
       <Table
         columns={columns}
         dataSource={data}
-        className="mt-20"
+        className="mt-20 font-poppins"
         pagination={{ pageSize: 2 }}
       />
 
       <Modal
-        title="Modal 1000px width"
         centered
         open={open.state}
-        onOk={() => setOpen(false)}
+        // onOk={() => setOpen(false)}
         onCancel={() => setOpen(false)}
+        footer={null}
         width={1000}
       >
-        {open.type === "edit" ? <h1>EDITAR</h1> : <h2>Nuevo</h2>}
+        <Form add={open.add} />
       </Modal>
     </>
   );
