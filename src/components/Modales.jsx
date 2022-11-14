@@ -1,0 +1,17 @@
+import { Modal } from 'antd';
+import {ManageConsForm} from './index';
+
+const Modales = ({ isOpen, setIsOpen, add }) => {
+    return (
+      <Modal
+        centered
+        open={isOpen}
+        onCancel={() => setIsOpen(false)}
+        footer={null}
+        width={1000}
+      >
+        <ManageConsForm add={add} />
+      </Modal>
+    );
+  };
+export default Modales

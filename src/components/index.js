@@ -1,3 +1,10 @@
-export { default as Form } from "./Form";
+export { default as ManageConsForm } from "./forms/ManageConsForm";
 export { default as Navbar } from "./Navbar";
-export { default as LoginForm } from './LoginForm'
+export { default as LoginForm } from "./forms/LoginForm";
+export { default as Layout } from "./layouts/Layout";
+export { default as withRole } from "./layouts/withRole";
+export { default as HeaderAdmin } from "./HeaderAdmin";
+export { default as TableAdmin } from "./TableAdmin";
+export { default as ShowCharts } from "./ShowCharts";
+export { default as ConsultorDataForm } from "./forms/ConsultorDataForm";
+export { default as Modales } from "./Modales";

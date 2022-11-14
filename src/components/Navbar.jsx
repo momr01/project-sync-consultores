@@ -1,45 +1,53 @@
-import { Menu } from "antd";
+import { DownOutlined, SettingFilled } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import { useAuth } from "../auth/authProvider";
+import { useState } from "react";
 
-const Navbar = () => (
-  //   <nav className="bg-primary">
-  //     <ul className="mx-10 flex flex-1 justify-between text-white py-5 mb-0">
-  //       <li>Syncronik</li>
-  //       <div className="flex">
-  //         <li className="mr-3">!</li>
-  //         <div>
-  //         <Menu.SubMenu key="profile" title="Perfil">
-  //             <Menu.Item key="two" icon={<AppstoreOutlined />}>
-  //               Navigation Two
-  //             </Menu.Item>
-  //             <Menu.Item key="three" icon={<AppstoreOutlined />}>
-  //               Navigation Three
-  //             </Menu.Item>
-  //             <Menu.ItemGroup title="Item Group">
-  //               <Menu.Item key="four" icon={<AppstoreOutlined />}>
-  //                 Navigation Four
-  //               </Menu.Item>
-  //               <Menu.Item key="five" icon={<AppstoreOutlined />}>
-  //                 Navigation Five
-  //               </Menu.Item>
-  //             </Menu.ItemGroup>
-  //           </Menu.SubMenu>
-  //         </div>
+const Navbar = () => {
+  const { logout, isAuthenticated } = useAuth();
+  const [open, setOpen] = useState(false);
 
-  //       </div>
-  //     </ul>
-  //   </nav>
-  <Menu mode="horizontal" style={{backgroundColor: "#002140", marginBottom: 0, paddingTop: "5px", paddingBottom: "5px"}}>
-    <Menu.Item key="logo" className="text-white font-poppins text-md ">Syncronik</Menu.Item>
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+  return (
+    <nav className="bg-primary">
+      <ul className="mx-10 flex flex-1 justify-between text-white py-5 mb-0">
+        <li className="my-auto">
+          <Link to="/" className="text-white hover:text-secondary">
+            Syncronik
+          </Link>
+        </li>
+        <div className="flex">
+          <li className="flex mr-5">
+            <SettingFilled className="my-auto cursor-pointer hover:text-secondary" />
+          </li>
+          {isAuthenticated && (
+            <li className="flex cursor-pointer" onClick={handleOpen}>
+              <p className="my-auto mr-1 hover:text-secondary">Usuario</p>
+              <DownOutlined className="my-auto hover:text-secondary" />
 
-    <Menu.SubMenu key="profile" title="Perfil" className="ml-auto text-white font-poppins text-md">
-      <Menu.Item key="edit" className="font-poppins">
-        Editar perfil
-      </Menu.Item>
-      <Menu.Item key="out" className="font-poppins">
-        Cerrar Sesión
-      </Menu.Item>
-    </Menu.SubMenu>
-  </Menu>
-);
+              {open && (
+                <div className="absolute top-10 bg-primary w-[170px] right-[30px] rounded-md pt-3">
+                  <ul>
+                    <li className="rounded-md py-3 text-center cursor-pointer border-b-2 border-secondary hover:bg-secondary hover:text-primary">
+                      Editar perfil
+                    </li>
+                    <li
+                      onClick={logout}
+                      className="rounded-md py-3 text-center cursor-pointer border-secondary hover:bg-secondary hover:text-primary"
+                    >
+                      Cerrar Sesión
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </li>
+          )}
+        </div>
+      </ul>
+    </nav>
+  );
+};
 
 export default Navbar;

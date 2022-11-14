@@ -26,14 +26,16 @@ code {
   bottom: 20px;
 }
 
-.ant-menu-root > li:nth-of-type(1)::after {
+/* .ant-menu-root > li:nth-of-type(1)::after {
   display: none;
+} */
+
+/* .ant-layout-sider-children ul .ant-menu-item-only-child {
+  margin: 0;
+  padding: 0;
 }
 
-.ant-menu-root > li:nth-of-type(1)::after:hover {
-  color: aquamarine;
-}
-
-.ant-menu-root > li:nth-of-type(1)::after:focus {
-  color: aquamarine;
-}
+.ant-layout-sider-children ul li {
+  margin: 0;
+  padding-left: 0;
+} */

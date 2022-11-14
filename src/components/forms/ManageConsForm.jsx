@@ -1,25 +1,38 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { formCrud } from "../style";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { setAddEmployee } from "../../app/EmployeesSlice";
+import { formCrud } from "../../style";
 
-const Form = ({ add }) => {
-  const { register, handleSubmit } = useForm();
+const ManageConsForm = ({ add, data }) => {
+  const { register, handleSubmit, reset } = useForm();
   const [section, setSection] = useState("Software Factory");
+  const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log(data);
+    //console.log(data);
+    dispatch(setAddEmployee(data));
+    reset();
   };
 
   const onChange = (data) => {
     setSection(data.target.value);
-    console.log(data.target.value);
+    //console.log(data.target.value);
   };
   return (
     <>
-      <div className="flex py-4">
-        <h2 className="mx-auto font-poppins text-2xl mb-10">
-          {add ? "Agregar un nuevo consultor" : "Editar el consultor"}
+      <div className="flex py-4 justify-center m-5">
+        <h2 className="font-poppins text-2xl my-auto mr-5">
+          {add
+            ? "Agregar un nuevo consultor"
+            : `Editar el consultor: ${data?.surname}, ${data?.name}`}
         </h2>
+        {!add && (
+          <Link className="my-auto hover:underline" to="/">
+            Volver
+          </Link>
+        )}
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className={formCrud.form}>
         <div className={formCrud.divInput}>
@@ -29,6 +42,7 @@ const Form = ({ add }) => {
             placeholder="Nombre del consultor"
             {...register("name")}
             className={formCrud.input}
+            defaultValue={data?.name ? `${data.name}` : ""}
           />
         </div>
         <div className={formCrud.divInput}>
@@ -38,6 +52,7 @@ const Form = ({ add }) => {
             placeholder="Apellido del consultor"
             {...register("lastname")}
             className={formCrud.input}
+            defaultValue={data?.surname ? `${data.surname}` : ""}
           />
         </div>
         <div className={formCrud.divInput}>
@@ -45,8 +60,9 @@ const Form = ({ add }) => {
           <input
             type="tel"
             placeholder="Teléfono del consultor"
-            {...register("tel")}
+            {...register("phone")}
             className={formCrud.input}
+            defaultValue={data?.phone ? `${data.phone}` : ""}
           />
         </div>
         <div className={formCrud.divInput}>
@@ -55,6 +71,7 @@ const Form = ({ add }) => {
             {...register("section")}
             onChange={onChange}
             className={formCrud.input}
+            defaultValue={data?.section ? `${data.section}` : ""}
           >
             <option>Software Factory</option>
             <option>SAP</option>
@@ -63,13 +80,19 @@ const Form = ({ add }) => {
         <div className={formCrud.divInput}>
           <label className={formCrud.label}>Sub-división:</label>
           {section === "SAP" ? (
-            <select {...register("position")} className={formCrud.input}>
+            <select
+              //{...register("position")}
+              className={formCrud.input}
+            >
               <option>MM</option>
               <option>SAP2</option>
               <option>SAP3</option>
             </select>
           ) : (
-            <select {...register("position")} className={formCrud.input}>
+            <select
+              //{...register("position")}
+              className={formCrud.input}
+            >
               <option>Front-end</option>
               <option>Back-end</option>
             </select>
@@ -82,6 +105,7 @@ const Form = ({ add }) => {
             placeholder="Correo electrónico del consultor"
             {...register("email")}
             className={formCrud.input}
+            defaultValue={data?.email ? `${data.email}` : ""}
           />
         </div>
         <div className={formCrud.divBtn}>
@@ -94,4 +118,4 @@ const Form = ({ add }) => {
   );
 };
 
-export default Form;
+export default ManageConsForm;

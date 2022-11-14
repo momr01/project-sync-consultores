@@ -7,7 +7,7 @@ export default function PublicRoute() {
 
   if (isAuthenticated) {
     if (admin) return <Navigate to="/admin" />;
-    else return <Navigate to="/user" />;
+    else return <Navigate to="/consultor" />;
   }
 
   //con outlet se pintara el componente mas cercano, dentro del mismo grupo
