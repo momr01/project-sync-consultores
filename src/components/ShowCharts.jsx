@@ -4,7 +4,7 @@ const ShowCharts = () => {
   return (
     <>
       <div className="mt-10">
-        <h2 className="text-2xl font-poppins text-center">Gráficos</h2>
+        <h2 className="text-3xl font-poppins text-center font-bold text-primary">Gráficos</h2>
       </div>
       <div className="md:flex md:justify-around mt-10">
         <div className="md:w-[60%]">

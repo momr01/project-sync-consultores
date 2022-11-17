@@ -8,3 +8,4 @@ export { default as TableAdmin } from "./TableAdmin";
 export { default as ShowCharts } from "./ShowCharts";
 export { default as ConsultorDataForm } from "./forms/ConsultorDataForm";
 export { default as Modales } from "./Modales";
+export { default as Footer } from "./Footer";

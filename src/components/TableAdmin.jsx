@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { selectEmpItems } from "../app/EmployeesSlice";
-import { colAdminPage } from "../helpers/variables";
+import { colAdminPage } from "../helpers/static";
 import { Link } from "react-router-dom";
 
 const TableAdmin = () => {

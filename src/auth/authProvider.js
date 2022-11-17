@@ -6,10 +6,15 @@ import {
   useMemo,
 } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { revertAll } from "../app/EmployeesSlice";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const dispatch = useDispatch();
+
   const USER = "USER";
   const ROL = "ROL";
   const ID = "ID";
@@ -29,6 +34,14 @@ export function AuthProvider({ children }) {
       window.localStorage.setItem(ROL, true);
       setAdmin(true);
     }
+    toast.success(`Login OK`, {
+      style: {
+        borderRadius: "10px",
+        fontSize: "1.3rem",
+        background: "#CCF6B6",
+        color: "#000",
+      },
+    });
   }, []);
 
   const logout = useCallback(function () {
@@ -38,6 +51,7 @@ export function AuthProvider({ children }) {
     setAdmin(false);
     window.localStorage.removeItem(ID);
     setId("");
+    dispatch(revertAll());
   }, []);
 
   //usememo porque no quiero crear este objeto cada vez, sino memorizar el valor y que solo cambie cuando

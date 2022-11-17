@@ -1,18 +1,33 @@
 import { useState } from "react";
-import {Modales} from "./index";
+import { Modales } from "./index";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { selectEmpItems } from "../app/EmployeesSlice";
 
 const HeaderAdmin = () => {
+  const { register } = useForm();
   const [isOpen, setIsOpen] = useState(false);
+
+  const empleados = useSelector(selectEmpItems)
 
   const onModalAddConsToggle = () => {
     setIsOpen(true);
   };
 
+  const handleChange = (data) => {
+    console.log(data.target.value);
+    console.log(empleados)
+
+
+  };
+
   return (
     <>
-      <div className="flex justify-between mt-10">
+      <div className="flex justify-between pt-10">
         <div>
-          <h1 className="text-2xl font-poppins">Lista de consultores</h1>
+          <h1 className="text-3xl font-poppins text-primary font-bold">
+            Lista de consultores
+          </h1>
         </div>
 
         <div>
@@ -20,6 +35,8 @@ const HeaderAdmin = () => {
             type="text"
             placeholder="Buscar..."
             className="border-2 p-3 mr-2 focus:outline-primary"
+            {...register("search")}
+            onChange={handleChange}
           />
           <button
             onClick={onModalAddConsToggle}

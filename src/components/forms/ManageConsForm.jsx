@@ -1,29 +1,73 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { setAddEmployee } from "../../app/EmployeesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate } from "react-router-dom";
+import {
+  selectChangesSaved,
+  setAddEmployee,
+  setEditEmployee,
+} from "../../app/EmployeesSlice";
+import { formData } from "../../helpers/static";
 import { formCrud } from "../../style";
 
-const ManageConsForm = ({ add, data }) => {
-  const { register, handleSubmit, reset } = useForm();
-  const [section, setSection] = useState("Software Factory");
+const ManageConsForm = ({ add, data, setIsOpen }) => {
   const dispatch = useDispatch();
+  const changesSaved = useSelector(selectChangesSaved);
 
-  const onSubmit = (data) => {
-    //console.log(data);
-    dispatch(setAddEmployee(data));
-    reset();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const [division, setDivision] = useState("Software Factory");
+
+  useEffect(() => {
+    let defaultValues = {};
+    defaultValues.name = data?.name ? `${data?.name}` : "";
+    defaultValues.surname = data?.surname ? `${data?.surname}` : "";
+    defaultValues.phone = data?.phone ? `${data?.phone}` : "";
+    defaultValues.division = data?.division ? `${data?.division}` : division;
+    defaultValues.email = data?.email ? `${data?.email}` : "";
+    //defaultValues.lastName = "Rado";
+    reset({ ...defaultValues });
+  }, [reset, data]);
+
+  const onSubmit = (dataForm) => {
+    //console.log(dataForm);
+    const dataCompleted = {
+      id: add ? "1" : data?.id,
+      role: "consultor",
+      phone: dataForm.phone,
+      url_photo: add ? "" : data?.url_photo,
+      biography: add ? "" : data?.biography,
+      name: dataForm.name,
+      last_name: dataForm.surname,
+      division: dataForm.division,
+      subdivision: "",
+      email: dataForm.email,
+      password: dataForm.password,
+    };
+    console.log(dataCompleted);
+
+    if (add) {
+      dispatch(setAddEmployee(dataForm));
+      reset();
+      setIsOpen(false);
+    } else {
+      dispatch(setEditEmployee({ id: data.id, data: dataForm }));
+      //dispatch(revertAll());
+    }
   };
 
   const onChange = (data) => {
-    setSection(data.target.value);
-    //console.log(data.target.value);
+    setDivision(data.target.value);
   };
+
   return (
     <>
-      <div className="flex py-4 justify-center m-5">
-        <h2 className="font-poppins text-2xl my-auto mr-5">
+      <div className="flex py-4 justify-center pt-10">
+        <h2 className="font-poppins text-3xl my-auto mr-5 font-bold text-primary">
           {add
             ? "Agregar un nuevo consultor"
             : `Editar el consultor: ${data?.surname}, ${data?.name}`}
@@ -35,43 +79,36 @@ const ManageConsForm = ({ add, data }) => {
         )}
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className={formCrud.form}>
-        <div className={formCrud.divInput}>
-          <label className={formCrud.label}>Nombre:</label>
-          <input
-            type="text"
-            placeholder="Nombre del consultor"
-            {...register("name")}
-            className={formCrud.input}
-            defaultValue={data?.name ? `${data.name}` : ""}
-          />
-        </div>
-        <div className={formCrud.divInput}>
-          <label className={formCrud.label}>Apellido:</label>
-          <input
-            type="text"
-            placeholder="Apellido del consultor"
-            {...register("lastname")}
-            className={formCrud.input}
-            defaultValue={data?.surname ? `${data.surname}` : ""}
-          />
-        </div>
-        <div className={formCrud.divInput}>
-          <label className={formCrud.label}>Teléfono:</label>
-          <input
-            type="tel"
-            placeholder="Teléfono del consultor"
-            {...register("phone")}
-            className={formCrud.input}
-            defaultValue={data?.phone ? `${data.phone}` : ""}
-          />
-        </div>
+        {formData.map(({ key, label, type, placeholder, regist }) => (
+          <div key={key}>
+            <div className={formCrud.divInput}>
+              <label className={formCrud.label}>{label}</label>
+              <input
+                type={`${type}`}
+                placeholder={`${placeholder}`}
+                {...register(`${regist}`, { required: true })}
+                className={`${formCrud.input} ${
+                  errors?.[regist] &&
+                  "rounded-md border-red-500 focus:outline-red-500"
+                }`}
+              />
+            </div>
+            <div className="relative">
+              {errors?.[regist] && (
+                <span className="absolute mt-[-15px] right-0 text-xs text-red-500 font-bold">
+                  Este campo es requerido.
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+
         <div className={formCrud.divInput}>
           <label className={formCrud.label}>División:</label>
           <select
-            {...register("section")}
+            {...register("division", { required: true })}
             onChange={onChange}
             className={formCrud.input}
-            defaultValue={data?.section ? `${data.section}` : ""}
           >
             <option>Software Factory</option>
             <option>SAP</option>
@@ -79,41 +116,26 @@ const ManageConsForm = ({ add, data }) => {
         </div>
         <div className={formCrud.divInput}>
           <label className={formCrud.label}>Sub-división:</label>
-          {section === "SAP" ? (
-            <select
-              //{...register("position")}
-              className={formCrud.input}
-            >
+          {division === "SAP" ? (
+            <select className={formCrud.input}>
               <option>MM</option>
               <option>SAP2</option>
               <option>SAP3</option>
             </select>
           ) : (
-            <select
-              //{...register("position")}
-              className={formCrud.input}
-            >
+            <select className={formCrud.input}>
               <option>Front-end</option>
               <option>Back-end</option>
             </select>
           )}
         </div>
-        <div className={formCrud.divInput}>
-          <label className={formCrud.label}>Email:</label>
-          <input
-            type="email"
-            placeholder="Correo electrónico del consultor"
-            {...register("email")}
-            className={formCrud.input}
-            defaultValue={data?.email ? `${data.email}` : ""}
-          />
-        </div>
         <div className={formCrud.divBtn}>
           <button type="submit" className={formCrud.button}>
-            Enviar
+            {add ? "Agregar" : "Editar"}
           </button>
         </div>
       </form>
+      {changesSaved && <Navigate to="/" replace={true} />}
     </>
   );
 };

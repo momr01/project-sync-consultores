@@ -1,20 +1,42 @@
 import { DownOutlined, SettingFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/authProvider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectOneEmp, setOneEmployee } from "../app/EmployeesSlice";
 
 const Navbar = () => {
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, isAuthenticated, id } = useAuth();
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const handleOpen = () => {
     setOpen(!open);
   };
+
+  console.log(id)
+
+  useEffect(() => {
+    if (id) {
+      dispatch(setOneEmployee({ id }));
+    }
+  }, [dispatch, id]);
+  // console.log(id)
+
+  const consultor = useSelector(selectOneEmp);
+  console.log(consultor);
+
+  // useEffect(()=> {
+  //   if(id)
+  // })
   return (
     <nav className="bg-primary">
-      <ul className="mx-10 flex flex-1 justify-between text-white py-5 mb-0">
+      <ul className="mx-10 flex flex-1 justify-between text-white py-4 mb-0">
         <li className="my-auto">
-          <Link to="/" className="text-white hover:text-secondary">
+          <Link
+            to="/"
+            className="text-white hover:text-secondary text-xl font-bold"
+          >
             Syncronik
           </Link>
         </li>
@@ -24,7 +46,10 @@ const Navbar = () => {
           </li>
           {isAuthenticated && (
             <li className="flex cursor-pointer" onClick={handleOpen}>
-              <p className="my-auto mr-1 hover:text-secondary">Usuario</p>
+              {consultor?.id && (
+                <p className="my-auto mr-1 hover:text-secondary">{`${consultor.name} ${consultor.surname}`}</p>
+              )}
+
               <DownOutlined className="my-auto hover:text-secondary" />
 
               {open && (

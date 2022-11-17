@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Layout, Menu, Modal } from "antd";
 import {
   PieChartOutlined,
@@ -13,11 +14,18 @@ import {
   TableAdmin,
   withRole,
 } from "../components";
+import { revertAll, revertChangesSaved } from "../app/EmployeesSlice";
 
 const Admin = () => {
+  const dispatch = useDispatch();
+
   const [collapsed, setCollapsed] = useState(true);
   const [showCharts, setShowCharts] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(revertChangesSaved());
+  }, [dispatch]);
 
   const { Content, Sider } = Layout;
   function getItem(label, key, icon, items) {
@@ -59,7 +67,7 @@ const Admin = () => {
     <>
       <Layout
         style={{
-          minHeight: "calc(100vh - 65px)",
+          //minHeight: "calc(100vh - 65px)",
           maxHeight: "100vh",
           display: "flex",
           maxWidth: "100%",
@@ -79,7 +87,7 @@ const Admin = () => {
           />
         </Sider>
         <Layout className="site-layout ml-5">
-          <Content className="overflow-scroll">
+          <Content className="overflow-auto page-height">
             <div className="container mx-auto">
               {showCharts ? (
                 <ShowCharts />

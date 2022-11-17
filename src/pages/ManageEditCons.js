@@ -29,7 +29,9 @@ const ManageEditCons = () => {
   }, [id, empleados]);
   return (
     <>
-      <ManageConsForm add={false} data={consultor} />
+      <section className="page-height">
+        <ManageConsForm add={false} data={consultor} />
+      </section>
     </>
   );
 };
