@@ -4,7 +4,11 @@ import { withRole } from "../components";
 import { colConsultorPage } from "../helpers/static";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { selectOneEmp, setOneEmployee } from "../app/EmployeesSlice";
+import {
+  revertChangesSaved,
+  selectOneEmp,
+  setOneEmployee,
+} from "../app/EmployeesSlice";
 
 const User = () => {
   const { id } = useAuth();
@@ -14,6 +18,10 @@ const User = () => {
     dispatch(setOneEmployee({ id }));
   }, [dispatch, id]);
   // console.log(id)
+
+  useEffect(() => {
+    dispatch(revertChangesSaved());
+  }, [dispatch]);
 
   const consultor = useSelector(selectOneEmp);
   console.log(consultor);

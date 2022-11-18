@@ -1,15 +1,27 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { selectOneEmp, setOneEmployee } from "../../app/EmployeesSlice";
+import { Link, Navigate } from "react-router-dom";
+import { selectChangesSaved, setEditConsultor } from "../../app/EmployeesSlice";
+import { editConsultor } from "../../helpers/static";
 import { formCrud } from "../../style";
 
 const ConsultorDataForm = ({ consultor }) => {
-  const { register, handleSubmit, reset } = useForm();
+  const dispatch = useDispatch();
+  const changesSaved = useSelector(selectChangesSaved);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     let defaultValues = {};
+    defaultValues.name = consultor.name;
+    defaultValues.surname = consultor.surname;
+    defaultValues.division = consultor.division;
+    defaultValues.subdivision = consultor.subdivision;
     defaultValues.url_photo = consultor?.url_photo
       ? `${consultor?.url_photo}`
       : "./img/";
@@ -47,121 +59,78 @@ const ConsultorDataForm = ({ consultor }) => {
     };
 
     console.log(dataCompleted);
+    dispatch(setEditConsultor({ id: consultor.id, data: dataCompleted }));
   };
   return (
-    <section className="pt-10 font-poppins page-height fondo_gradient_grey overflow-auto">
-      <div className="mb-10 flex justify-center">
-        <h2 className="text-[30px] my-auto mr-10">Actualizar datos</h2>
-        <Link className="my-auto" to="/">
-          Volver
-        </Link>
-      </div>
-      <form className="w-[90%] mx-auto" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex justify-between">
-          <div className="w-[45%] h-[60vh]">
-            <div className="flex justify-between mb-20">
-              <label className={formCrud.label}>Seleccione una imagen:</label>
-              <input
-                type="file"
-                className={formCrud.input}
-                {...register("url_photo")}
-                accept="image/png, image/gif, image/jpeg"
-              />
-            </div>
-            <div className="flex justify-between mb-10">
-              <label className={formCrud.label}>Biografía:</label>
-              <textarea
-                maxLength={500}
-                autoFocus={true}
-                {...register("biography")}
-                className="border-2 w-[80%] resize-none focus:outline-secondary h-[200px]"
-              ></textarea>
-            </div>
-          </div>
-
-          <div className="w-[45%] h-[60vh] relative">
-            <div className={formCrud.divInput}>
-              <label className={formCrud.label}>Nombre:</label>
-              <input
-                type="text"
-                defaultValue={`${consultor.name}`}
-                disabled={true}
-                className={formCrud.input}
-              />
-            </div>
-            <div className={formCrud.divInput}>
-              <label className={formCrud.label}>Apellido:</label>
-              <input
-                type="text"
-                className={formCrud.input}
-                disabled={true}
-                defaultValue={`${consultor.surname}`}
-              />
-            </div>
-            <div className={formCrud.divInput}>
-              <label className={formCrud.label}>Teléfono:</label>
-              <input
-                type="tel"
-                placeholder="Ingrese su teléfono"
-                {...register("phone", { required: true })}
-                className={formCrud.input}
-              />
-            </div>
-            <div className={formCrud.divInput}>
-              <label className={formCrud.label}>División:</label>
-              <input
-                type="text"
-                placeholder="Ingrese su división"
-                className={formCrud.input}
-                disabled={true}
-                defaultValue={`${consultor.division}`}
-              />
-            </div>
-            <div className={formCrud.divInput}>
-              <label className={formCrud.label}>Sub-división:</label>
-              <input
-                type="text"
-                placeholder="Ingrese su sub-división"
-                className={formCrud.input}
-                disabled={true}
-                defaultValue={`${consultor.subdivision}`}
-              />
-            </div>
-            <div className={formCrud.divInput}>
-              <label className={formCrud.label}>Email:</label>
-              <input
-                type="email"
-                placeholder="Correo electrónico del consultor"
-                {...register("email", { required: true })}
-                className={formCrud.input}
-              />
-            </div>
-            <div className={formCrud.divInput}>
-              <label className={formCrud.label}>Password:</label>
-              <input
-                type="password"
-                placeholder="Contraseña del consultor"
-                {...register("password", { required: true })}
-                className={formCrud.input}
-              />
-            </div>
-            <button
-              type="submit"
-              className="absolute bottom-3 bg-secondary py-2 w-full rounded-md text-primary hover:bg-primary hover:text-white mt-10"
-            >
-              Actualizar
-            </button>
-          </div>
+    <>
+      <section className="pt-10 font-poppins page-height fondo_gradient_grey overflow-auto">
+        <div className="mb-10 flex justify-center">
+          <h2 className="text-[30px] my-auto mr-10">Actualizar datos</h2>
+          <Link className="my-auto" to="/">
+            Volver
+          </Link>
         </div>
+        <form className="w-[90%] mx-auto" onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex justify-between">
+            <div className="w-[45%] h-[60vh]">
+              <div className="flex justify-between mb-20">
+                <label className={formCrud.label}>Seleccione una imagen:</label>
+                <input
+                  type="file"
+                  className={formCrud.input}
+                  {...register("url_photo")}
+                  accept="image/png, image/gif, image/jpeg"
+                />
+              </div>
+              <div className="flex justify-between mb-10">
+                <label className={formCrud.label}>Biografía:</label>
+                <textarea
+                  maxLength={500}
+                  autoFocus={true}
+                  {...register("biography")}
+                  className="border-2 w-[80%] resize-none focus:outline-secondary h-[200px]"
+                ></textarea>
+              </div>
+            </div>
 
-        {/* <button
-          type="submit"
-          className="bg-secondary py-2 w-full rounded-md text-primary hover:bg-primary hover:text-white mt-10"
-        >
-          Actualizar
-        </button> */}
-      </form>
-    </section>
+            <div className="w-[45%] h-[60vh] relative">
+              {editConsultor.map((input) => (
+                <div key={input.key}>
+                  <div className={formCrud.divInput}>
+                    <label className={formCrud.label}>{input.label}</label>
+                    <input
+                      type={`${input.type}`}
+                      placeholder={`${input.placeholder}`}
+                      {...register(`${input.regist}`, { required: true })}
+                      className={`${formCrud.input} ${
+                        errors?.[input.regist] &&
+                        "rounded-md border-red-500 focus:outline-red-500"
+                      }`}
+                      disabled={input.isDisabled}
+                    />
+                  </div>
+                  <div className="relative">
+                    {errors?.[input.regist] && (
+                      <span className="absolute mt-[-15px] right-0 text-xs text-red-500 font-bold">
+                        Este campo es requerido.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              <button
+                type="submit"
+                className="absolute bottom-3 bg-secondary py-2 w-full rounded-md text-primary hover:bg-primary hover:text-white mt-10"
+              >
+                Actualizar
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+      {changesSaved && <Navigate to="/" replace={true} />}
+    </>
   );
 };
 

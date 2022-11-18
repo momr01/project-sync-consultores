@@ -42,12 +42,12 @@ const Navbar = () => {
         </li>
         <div className="flex">
           <li className="flex mr-5">
-            <SettingFilled className="my-auto cursor-pointer hover:text-secondary" />
+            <SettingFilled className="my-auto cursor-pointer hover:text-secondary text-lg" />
           </li>
           {isAuthenticated && (
             <li className="flex cursor-pointer" onClick={handleOpen}>
               {consultor?.id && (
-                <p className="my-auto mr-1 hover:text-secondary">{`${consultor.name} ${consultor.surname}`}</p>
+                <p className="my-auto mr-1 hover:text-secondary text-base">{`${consultor.name} ${consultor.surname}`}</p>
               )}
 
               <DownOutlined className="my-auto hover:text-secondary" />

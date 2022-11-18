@@ -14,7 +14,11 @@ import {
   TableAdmin,
   withRole,
 } from "../components";
-import { revertAll, revertChangesSaved } from "../app/EmployeesSlice";
+import {
+  revertAll,
+  revertChangesSaved,
+  revertSearch,
+} from "../app/EmployeesSlice";
 
 const Admin = () => {
   const dispatch = useDispatch();
@@ -25,6 +29,7 @@ const Admin = () => {
 
   useEffect(() => {
     dispatch(revertChangesSaved());
+    dispatch(revertSearch());
   }, [dispatch]);
 
   const { Content, Sider } = Layout;
@@ -86,7 +91,7 @@ const Admin = () => {
             items={items}
           />
         </Sider>
-        <Layout className="site-layout ml-5">
+        <Layout className="site-layout mx-10">
           <Content className="overflow-auto page-height">
             <div className="container mx-auto">
               {showCharts ? (

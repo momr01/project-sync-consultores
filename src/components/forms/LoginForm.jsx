@@ -57,7 +57,7 @@ const LoginForm = () => {
                 })}
                 className={`${
                   errors?.[input.regist] && "border-[3px] border-red-500"
-                } w-[60%] py-1.5 rounded-md focus:outline-secondary pl-3`}
+                } w-[60%] py-1.5 rounded-md focus:outline-none pl-3`}
               />
             </div>
             <div className="relative">
@@ -84,7 +84,7 @@ const LoginForm = () => {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="btn bg-secondary w-full py-3 text-lg font-semibold hover:bg-primary hover:text-white text-primary p-2 rounded-lg"
+            className="btn bg-secondary w-full py-3 text-lg font-semibold hover:bg-primary hover:text-secondary text-primary p-2 rounded-lg"
           >
             Iniciar Sesión
           </button>

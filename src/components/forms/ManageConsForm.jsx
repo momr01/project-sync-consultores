@@ -20,15 +20,32 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
     reset,
     formState: { errors },
   } = useForm();
-  const [division, setDivision] = useState("Software Factory");
+  const [division, setDivision] = useState(
+    !add ? data?.division : "Software Factory"
+  );
+  // const [subdivision, setSubdivision] = useState(
+  //   data.subdivision
+  // );
+
+  console.log(data?.subdivision);
 
   useEffect(() => {
     let defaultValues = {};
     defaultValues.name = data?.name ? `${data?.name}` : "";
     defaultValues.surname = data?.surname ? `${data?.surname}` : "";
     defaultValues.phone = data?.phone ? `${data?.phone}` : "";
-    defaultValues.division = data?.division ? `${data?.division}` : division;
+    // defaultValues.division = data?.division ? `${data?.division}` : division;
+    // defaultValues.subdivision = data?.subdivision
+    //   ? `${data?.subdivision}`
+    //   : subdivision;
+    defaultValues.division = data?.division
+      ? `${data?.division}`
+      : "Software Factory";
+    defaultValues.subdivision = data?.subdivision
+      ? `${data?.subdivision}`
+      : "Front-end";
     defaultValues.email = data?.email ? `${data?.email}` : "";
+    defaultValues.password = data?.password ? `${data?.password}` : "";
     //defaultValues.lastName = "Rado";
     reset({ ...defaultValues });
   }, [reset, data]);
@@ -44,7 +61,7 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
       name: dataForm.name,
       last_name: dataForm.surname,
       division: dataForm.division,
-      subdivision: "",
+      subdivision: dataForm.subdivision,
       email: dataForm.email,
       password: dataForm.password,
     };
@@ -60,9 +77,13 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
     }
   };
 
-  const onChange = (data) => {
+  const onChangeDivision = (data) => {
     setDivision(data.target.value);
   };
+
+  // const onChangeSubdivision = (data) => {
+  //   setSubdivision(data.target.value);
+  // };
 
   return (
     <>
@@ -107,7 +128,7 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
           <label className={formCrud.label}>División:</label>
           <select
             {...register("division", { required: true })}
-            onChange={onChange}
+            onChange={onChangeDivision}
             className={formCrud.input}
           >
             <option>Software Factory</option>
@@ -116,19 +137,42 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
         </div>
         <div className={formCrud.divInput}>
           <label className={formCrud.label}>Sub-división:</label>
+
+          <select
+            className={formCrud.input}
+            {...register("subdivision", { required: true })}
+            //onChange={onChangeSubdivision}
+          >
+            <option value="MM">MM</option>
+            <option value="SAP2">SAP2</option>
+            <option value="SAP3">SAP3</option>
+            <option value="Front-end">Front-end</option>
+            <option value="Back-end">Back-end</option>
+          </select>
+        </div>
+        {/* <div className={formCrud.divInput}>
+          <label className={formCrud.label}>Sub-división:</label>
           {division === "SAP" ? (
-            <select className={formCrud.input}>
+            <select
+              className={formCrud.input}
+              {...register("subdivision", { required: true })}
+              onChange={onChangeSubdivision}
+            >
               <option>MM</option>
               <option>SAP2</option>
               <option>SAP3</option>
             </select>
           ) : (
-            <select className={formCrud.input}>
+            <select
+              className={formCrud.input}
+              {...register("subdivision", { required: true })}
+              onChange={onChangeSubdivision}
+            >
               <option>Front-end</option>
               <option>Back-end</option>
             </select>
           )}
-        </div>
+        </div> */}
         <div className={formCrud.divBtn}>
           <button type="submit" className={formCrud.button}>
             {add ? "Agregar" : "Editar"}
