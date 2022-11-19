@@ -20,9 +20,9 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
     reset,
     formState: { errors },
   } = useForm();
-  const [division, setDivision] = useState(
-    !add ? data?.division : "Software Factory"
-  );
+  // const [division, setDivision] = useState(
+  //   !add ? data?.division : "Software Factory"
+  // );
   // const [subdivision, setSubdivision] = useState(
   //   data.subdivision
   // );
@@ -77,9 +77,9 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
     }
   };
 
-  const onChangeDivision = (data) => {
-    setDivision(data.target.value);
-  };
+  // const onChangeDivision = (data) => {
+  //   setDivision(data.target.value);
+  // };
 
   // const onChangeSubdivision = (data) => {
   //   setSubdivision(data.target.value);
@@ -128,7 +128,7 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
           <label className={formCrud.label}>División:</label>
           <select
             {...register("division", { required: true })}
-            onChange={onChangeDivision}
+            //onChange={onChangeDivision}
             className={formCrud.input}
           >
             <option>Software Factory</option>

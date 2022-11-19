@@ -29,7 +29,7 @@ const ManageEditCons = () => {
   }, [id, empleados]);
   return (
     <>
-      <section className="page-height">
+      <section className="page-height overflow-auto">
         <ManageConsForm add={false} data={consultor} />
       </section>
     </>

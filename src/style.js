@@ -1,5 +1,5 @@
 export const formCrud = {
-  form: "w-[50%] mx-auto rounded-md p-5 mb-12 font-poppins",
+  form: "md:w-[50%] w-[80%] mx-auto rounded-md p-5 mb-12 font-poppins",
   divInput: "flex justify-between py-3",
   label: "w-[30%]",
   input: "border-2 w-[60%] p-1 focus:outline-secondary",

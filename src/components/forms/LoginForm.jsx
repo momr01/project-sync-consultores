@@ -40,7 +40,7 @@ const LoginForm = () => {
   return (
     <>
       <form
-        className="flex flex-col w-[50%] mx-auto mt-20 font-poppins"
+        className="flex flex-col md:w-[50%] w-[80%] mx-auto mt-20 font-poppins"
         onSubmit={handleSubmit(onSubmit)}
       >
         {formLoginData.map((input) => (
@@ -98,7 +98,7 @@ const LoginForm = () => {
           )}
         </div>
 
-        <hr className="my-20 border-1" />
+        <hr className="my-10 border-1" />
       </form>
     </>
   );

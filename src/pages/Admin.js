@@ -91,7 +91,7 @@ const Admin = () => {
             items={items}
           />
         </Sider>
-        <Layout className="site-layout mx-10">
+        <Layout className="site-layout sm:mx-10">
           <Content className="overflow-auto page-height">
             <div className="container mx-auto">
               {showCharts ? (

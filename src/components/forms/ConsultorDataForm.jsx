@@ -71,8 +71,8 @@ const ConsultorDataForm = ({ consultor }) => {
           </Link>
         </div>
         <form className="w-[90%] mx-auto" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex justify-between">
-            <div className="w-[45%] h-[60vh]">
+          <div className="flex md:flex-row flex-col justify-between">
+            <div className="md:w-[45%] w-[100%] h-[60vh]">
               <div className="flex justify-between mb-20">
                 <label className={formCrud.label}>Seleccione una imagen:</label>
                 <input
@@ -93,7 +93,7 @@ const ConsultorDataForm = ({ consultor }) => {
               </div>
             </div>
 
-            <div className="w-[45%] h-[60vh] relative">
+            <div className="md:w-[45%] w-[100%] h-[60vh] relative">
               {editConsultor.map((input) => (
                 <div key={input.key}>
                   <div className={formCrud.divInput}>
@@ -121,7 +121,7 @@ const ConsultorDataForm = ({ consultor }) => {
 
               <button
                 type="submit"
-                className="absolute bottom-3 bg-secondary py-2 w-full rounded-md text-primary hover:bg-primary hover:text-white mt-10"
+                className="lg:absolute bottom-3 bg-secondary py-2 w-full rounded-md text-primary hover:bg-primary hover:text-white mt-10 mb-5"
               >
                 Actualizar
               </button>

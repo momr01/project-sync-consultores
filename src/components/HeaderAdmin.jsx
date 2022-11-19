@@ -48,7 +48,7 @@ const HeaderAdmin = () => {
 
   return (
     <>
-      <div className="flex justify-between pt-10">
+      <div className="flex sm:justify-between flex-col sm:flex-row pt-10">
         <div>
           <h1 className="text-3xl font-poppins text-primary font-bold">
             Lista de consultores
