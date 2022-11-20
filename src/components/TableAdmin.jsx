@@ -13,7 +13,6 @@ const TableAdmin = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("re-render")
     dispatch(fetchAllEmployees());
   }, [dispatch]);
 

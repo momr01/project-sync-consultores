@@ -17,6 +17,7 @@ const initialState = {
   employeeToEdit: [],
   changesSaved: false,
   searchItems: [],
+  modalIsOpen: false,
 };
 
 /**
@@ -182,6 +183,9 @@ const EmployeesSlice = createSlice({
     setSearchItems: (state, action) => {
       state.searchItems = action.payload.data;
     },
+    setModalState: (state, action)=> {
+      state.modalIsOpen = !state.modalIsOpen;
+    }
   },
 });
 
@@ -193,6 +197,7 @@ export const {
   setSearchItems,
   setOneEmployeeById,
   setOneEmployeeToEdit,
+  setModalState
 } = EmployeesSlice.actions;
 
 //exporto estados
@@ -201,6 +206,7 @@ export const selectEmpItems = (state) => state.employees.employeesItems;
 export const selectOneEmp = (state) => state.employees.employeeItem;
 export const selectChangesSaved = (state) => state.employees.changesSaved;
 export const selectSearchItems = (state) => state.employees.searchItems;
+export const selectModalState = (state) => state.employees.modalIsOpen;
 
 export default EmployeesSlice.reducer;
 

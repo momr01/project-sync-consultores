@@ -2,6 +2,7 @@ export { default as ConsultorDataForm } from "./forms/ConsultorDataForm";
 export { default as Footer } from "./Footer";
 export { default as HeaderAdmin } from "./HeaderAdmin";
 export { default as Layout } from "./layouts/Layout";
+export { default as Loading } from "./Loading";
 export { default as LoginForm } from "./forms/LoginForm";
 export { default as ManageConsForm } from "./forms/ManageConsForm";
 export { default as Modales } from "./Modales";

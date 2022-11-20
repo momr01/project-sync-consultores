@@ -12,6 +12,7 @@ import {
 } from "../../app/EmployeesSlice";
 import { formData } from "../../helpers/static";
 import { formCrud } from "../../style";
+import { Loading } from "../index";
 
 const ManageConsForm = ({ add, setIsOpen }) => {
   const dispatch = useDispatch();
@@ -97,9 +98,13 @@ const ManageConsForm = ({ add, setIsOpen }) => {
     <>
       <div className="flex py-4 justify-center pt-10">
         <h2 className="font-poppins text-3xl my-auto mr-5 font-bold text-primary">
-          {add
-            ? "Agregar un nuevo consultor"
-            : `Editar el consultor: ${data?.surname}, ${data?.name}`}
+          {add ? (
+            "Agregar un nuevo consultor"
+          ) : data?.name ? (
+            `Editar el consultor: ${data?.surname}, ${data?.name}`
+          ) : (
+            <Loading />
+          )}
         </h2>
         {!add && (
           <Link className="my-auto hover:underline" to="/">
@@ -163,7 +168,6 @@ const ManageConsForm = ({ add, setIsOpen }) => {
         </div>
       </form>
       {changesSaved && <Navigate to="/admin" replace={true} />}
-     
     </>
   );
 };

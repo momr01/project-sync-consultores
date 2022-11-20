@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Layout, Menu } from "antd";
 import {
   PieChartOutlined,
@@ -18,6 +18,8 @@ import {
   fetchOneEmployee,
   revertChangesSaved,
   revertSearch,
+  selectModalState,
+  setModalState,
 } from "../app/EmployeesSlice";
 import { useAuth } from "../auth/authProvider";
 
@@ -37,12 +39,16 @@ const Admin = () => {
    * se revierten los cambios que genera el buscar un empleado
    *
    */
+  const modalIsOpen = useSelector(selectModalState);
+
   useEffect(() => {
     dispatch(fetchAllEmployees());
     dispatch(fetchOneEmployee({ id }));
     dispatch(revertChangesSaved());
     dispatch(revertSearch());
-  }, [dispatch, id, isOpen]);
+  }, [dispatch, id, modalIsOpen]);
+
+  console.log(modalIsOpen);
 
   const { Content, Sider } = Layout;
   function getItem(label, key, icon, items) {
