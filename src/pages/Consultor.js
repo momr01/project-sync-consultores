@@ -5,37 +5,26 @@ import { colConsultorPage } from "../helpers/static";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
+  fetchOneEmployee,
   revertChangesSaved,
   selectOneEmp,
-  setOneEmployee,
 } from "../app/EmployeesSlice";
 
 const User = () => {
-  const { id } = useAuth();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(setOneEmployee({ id }));
-  }, [dispatch, id]);
-  // console.log(id)
+  const { id } = useAuth();
 
+  /**
+   * se obtiene los datos del empleado que ha iniciado sesión
+   * se revierten los cambios que ocasiona el editar un empleado
+   */
   useEffect(() => {
+    dispatch(fetchOneEmployee({ id }));
     dispatch(revertChangesSaved());
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   const consultor = useSelector(selectOneEmp);
-  console.log(consultor);
-
-  const data = [
-    {
-      key: "1",
-      name: "John",
-      surname: "Brown",
-      section: "Software Factory",
-      phone: 155677789,
-      email: "1@1.com",
-    },
-  ];
 
   return (
     <div className="fondo_gradient_grey overflow-auto">
@@ -47,15 +36,15 @@ const User = () => {
             <p className="text-lg my-auto">{consultor.division}</p>
           </div>
           <div className="my-auto">
-            {/* <Link to={`/consultor/edit/${data[0].key}`}>Editar datos</Link> */}
-            <Link to={`/consultor/edit/${consultor.id}`}>Editar datos</Link>
+            <Link to={`/consultor/cons/edit/${consultor._id}`}>
+              Editar datos
+            </Link>
           </div>
         </div>
 
         <div className="flex justify-center">
           <div className="w-[30%]">
             <img
-              //src="/img/foto_perfil.jpg"
               src={`${consultor.url_photo}`}
               alt="profile"
               className="w-[50%] rounded-full mx-auto"

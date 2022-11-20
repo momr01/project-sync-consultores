@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Layout, Menu, Modal } from "antd";
+import { Layout, Menu } from "antd";
 import {
   PieChartOutlined,
   TeamOutlined,
@@ -8,29 +8,41 @@ import {
 } from "@ant-design/icons";
 import {
   HeaderAdmin,
-  ManageConsForm,
   Modales,
   ShowCharts,
   TableAdmin,
   withRole,
 } from "../components";
 import {
-  revertAll,
+  fetchAllEmployees,
+  fetchOneEmployee,
   revertChangesSaved,
   revertSearch,
 } from "../app/EmployeesSlice";
+import { useAuth } from "../auth/authProvider";
 
 const Admin = () => {
   const dispatch = useDispatch();
+
+  const { id } = useAuth();
 
   const [collapsed, setCollapsed] = useState(true);
   const [showCharts, setShowCharts] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  /**
+   * se obtiene el total de empleados de la DB
+   * se obtiene los datos del empleado que ha iniciado sesión
+   * se revierten los cambios que genera el actualizar un empleado
+   * se revierten los cambios que genera el buscar un empleado
+   *
+   */
   useEffect(() => {
+    dispatch(fetchAllEmployees());
+    dispatch(fetchOneEmployee({ id }));
     dispatch(revertChangesSaved());
     dispatch(revertSearch());
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   const { Content, Sider } = Layout;
   function getItem(label, key, icon, items) {
@@ -70,14 +82,7 @@ const Admin = () => {
 
   return (
     <>
-      <Layout
-        style={{
-          //minHeight: "calc(100vh - 65px)",
-          maxHeight: "100vh",
-          display: "flex",
-          maxWidth: "100%",
-        }}
-      >
+      <Layout>
         <Sider
           collapsible
           collapsed={collapsed}
@@ -99,7 +104,9 @@ const Admin = () => {
               ) : (
                 <>
                   <HeaderAdmin />
-                  <TableAdmin />
+                  <div className="overflow-x-auto">
+                    <TableAdmin />
+                  </div>
                 </>
               )}
             </div>

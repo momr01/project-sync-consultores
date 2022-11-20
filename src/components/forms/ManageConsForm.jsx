@@ -1,18 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import {
+  fetchAllEmployees,
+  fetchOneEmployeeToEdit,
   selectChangesSaved,
+  selectOneEmpToEdit,
   setAddEmployee,
   setEditEmployee,
 } from "../../app/EmployeesSlice";
 import { formData } from "../../helpers/static";
 import { formCrud } from "../../style";
 
-const ManageConsForm = ({ add, data, setIsOpen }) => {
+const ManageConsForm = ({ add, setIsOpen }) => {
   const dispatch = useDispatch();
-  const changesSaved = useSelector(selectChangesSaved);
+  const history = useLocation();
+
+  /**
+   *
+   * @returns
+   * se obtiene id desde path o ruta
+   */
+  const getId = () => {
+    const pathname = history.pathname;
+    const array = pathname.split("/");
+    const id = array[4];
+    return id;
+  };
+  const id = getId();
 
   const {
     register,
@@ -20,70 +36,62 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
     reset,
     formState: { errors },
   } = useForm();
-  // const [division, setDivision] = useState(
-  //   !add ? data?.division : "Software Factory"
-  // );
-  // const [subdivision, setSubdivision] = useState(
-  //   data.subdivision
-  // );
 
-  console.log(data?.subdivision);
+  /**
+   * se obtienen desde DB todos los empleados
+   * y si el formulario se abre con la intención de editar un
+   * empleado, más NO AGREGAR UNO NUEVO
+   * entonces se hace consulta a DB para obtener los datos de dicho empleado
+   * y así guardar en el store esos datos y así consumirlos más fácilmente
+   */
+  useEffect(() => {
+    dispatch(fetchAllEmployees());
+    if (!add) {
+      dispatch(fetchOneEmployeeToEdit({ id }));
+    }
+  }, [dispatch, id, add]);
 
+  const changesSaved = useSelector(selectChangesSaved);
+  const data = useSelector(selectOneEmpToEdit);
+
+  /**
+   * se definen los valores por defecto del formulario
+   */
   useEffect(() => {
     let defaultValues = {};
-    defaultValues.name = data?.name ? `${data?.name}` : "";
-    defaultValues.surname = data?.surname ? `${data?.surname}` : "";
-    defaultValues.phone = data?.phone ? `${data?.phone}` : "";
-    // defaultValues.division = data?.division ? `${data?.division}` : division;
-    // defaultValues.subdivision = data?.subdivision
-    //   ? `${data?.subdivision}`
-    //   : subdivision;
-    defaultValues.division = data?.division
-      ? `${data?.division}`
-      : "Software Factory";
-    defaultValues.subdivision = data?.subdivision
-      ? `${data?.subdivision}`
-      : "Front-end";
-    defaultValues.email = data?.email ? `${data?.email}` : "";
-    defaultValues.password = data?.password ? `${data?.password}` : "";
-    //defaultValues.lastName = "Rado";
+    defaultValues.name = !add ? `${data?.name}` : "";
+    defaultValues.surname = !add ? `${data?.surname}` : "";
+    defaultValues.phone = !add ? `${data?.phone}` : "";
+    defaultValues.division = !add ? `${data?.division}` : "Software Factory";
+    defaultValues.subdivision = !add ? `${data?.subdivision}` : "Front-end";
+    defaultValues.email = !add ? `${data?.email}` : "";
+    defaultValues.password = !add ? `${data?.password}` : "";
     reset({ ...defaultValues });
-  }, [reset, data]);
+  }, [reset, data, add]);
 
   const onSubmit = (dataForm) => {
-    //console.log(dataForm);
     const dataCompleted = {
-      id: add ? "1" : data?.id,
       role: "consultor",
       phone: dataForm.phone,
-      url_photo: add ? "" : data?.url_photo,
+      url_photo: add ? "/img/profile_default.jpg" : data?.url_photo,
       biography: add ? "" : data?.biography,
       name: dataForm.name,
-      last_name: dataForm.surname,
+      surname: dataForm.surname,
       division: dataForm.division,
       subdivision: dataForm.subdivision,
       email: dataForm.email,
       password: dataForm.password,
     };
-    console.log(dataCompleted);
 
     if (add) {
-      dispatch(setAddEmployee(dataForm));
+      dispatch(setAddEmployee(dataCompleted));
+      dispatch(fetchAllEmployees());
       reset();
       setIsOpen(false);
     } else {
-      dispatch(setEditEmployee({ id: data.id, data: dataForm }));
-      //dispatch(revertAll());
+      dispatch(setEditEmployee({ id: data._id, data: dataCompleted }));
     }
   };
-
-  // const onChangeDivision = (data) => {
-  //   setDivision(data.target.value);
-  // };
-
-  // const onChangeSubdivision = (data) => {
-  //   setSubdivision(data.target.value);
-  // };
 
   return (
     <>
@@ -116,7 +124,7 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
             </div>
             <div className="relative">
               {errors?.[regist] && (
-                <span className="absolute mt-[-15px] right-0 text-xs text-red-500 font-bold">
+                <span className="absolute mt-[-10px] right-0 text-xs text-red-500 font-bold">
                   Este campo es requerido.
                 </span>
               )}
@@ -128,7 +136,6 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
           <label className={formCrud.label}>División:</label>
           <select
             {...register("division", { required: true })}
-            //onChange={onChangeDivision}
             className={formCrud.input}
           >
             <option>Software Factory</option>
@@ -141,7 +148,6 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
           <select
             className={formCrud.input}
             {...register("subdivision", { required: true })}
-            //onChange={onChangeSubdivision}
           >
             <option value="MM">MM</option>
             <option value="SAP2">SAP2</option>
@@ -150,29 +156,6 @@ const ManageConsForm = ({ add, data, setIsOpen }) => {
             <option value="Back-end">Back-end</option>
           </select>
         </div>
-        {/* <div className={formCrud.divInput}>
-          <label className={formCrud.label}>Sub-división:</label>
-          {division === "SAP" ? (
-            <select
-              className={formCrud.input}
-              {...register("subdivision", { required: true })}
-              onChange={onChangeSubdivision}
-            >
-              <option>MM</option>
-              <option>SAP2</option>
-              <option>SAP3</option>
-            </select>
-          ) : (
-            <select
-              className={formCrud.input}
-              {...register("subdivision", { required: true })}
-              onChange={onChangeSubdivision}
-            >
-              <option>Front-end</option>
-              <option>Back-end</option>
-            </select>
-          )}
-        </div> */}
         <div className={formCrud.divBtn}>
           <button type="submit" className={formCrud.button}>
             {add ? "Agregar" : "Editar"}

@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   revertSearch,
   selectEmpItems,
-  selectSearchItems,
   setSearchItems,
 } from "../app/EmployeesSlice";
 
 const HeaderAdmin = () => {
-  const { register } = useForm();
   const dispatch = useDispatch();
+
+  const { register } = useForm();
   const [isOpen, setIsOpen] = useState(false);
 
   const empleados = useSelector(selectEmpItems);
@@ -20,13 +20,14 @@ const HeaderAdmin = () => {
     setIsOpen(true);
   };
 
+  /**
+   *
+   * @param {*} data
+   * funcion para filtrar empleados que el usuario desea buscar y mostrarlos
+   */
   const handleChange = (data) => {
-    //console.log(data.target.value);
-    //console.log(empleados)
     const result = [];
 
-    // const result = empleados.filter(emp => !emp.name.includes(data.target.value))
-    // console.log(result)
     if (data.target.value.length > 0) {
       empleados.forEach((emp) => {
         if (
@@ -40,17 +41,13 @@ const HeaderAdmin = () => {
     } else {
       dispatch(revertSearch());
     }
-
-    //console.log(result);
-    // const hola = useSelector(selectSearchItems)
-
   };
 
   return (
     <>
       <div className="flex sm:justify-between flex-col sm:flex-row pt-10">
-        <div>
-          <h1 className="text-3xl font-poppins text-primary font-bold">
+        <div className="my-auto">
+          <h1 className="text-3xl font-poppins text-primary font-bold mb-0">
             Lista de consultores
           </h1>
         </div>
@@ -59,13 +56,13 @@ const HeaderAdmin = () => {
           <input
             type="text"
             placeholder="Buscar por nombre o apellido..."
-            className="border-2 p-3 mr-2 focus:outline-secondary w-60"
+            className="border-2 p-3 mr-2 focus:outline-secondary w-60 rounded-lg"
             {...register("search")}
             onChange={handleChange}
           />
           <button
             onClick={onModalAddConsToggle}
-            className="btn bg-secondary p-3 rounded-md text-primary hover:text-white hover:bg-primary "
+            className="btn bg-secondary p-3 rounded-md text-primary hover:text-white hover:bg-primary mt-2"
           >
             Añadir consultor
           </button>

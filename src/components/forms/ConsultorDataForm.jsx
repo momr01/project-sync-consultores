@@ -2,13 +2,21 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
-import { selectChangesSaved, setEditConsultor } from "../../app/EmployeesSlice";
+import {
+  fetchAllEmployees,
+  fetchOneEmployee,
+  selectChangesSaved,
+  selectOneEmp,
+  setEditEmployee,
+} from "../../app/EmployeesSlice";
+import { useAuth } from "../../auth/authProvider";
 import { editConsultor } from "../../helpers/static";
 import { formCrud } from "../../style";
 
-const ConsultorDataForm = ({ consultor }) => {
+const ConsultorDataForm = () => {
   const dispatch = useDispatch();
-  const changesSaved = useSelector(selectChangesSaved);
+
+  const { id } = useAuth();
   const {
     register,
     handleSubmit,
@@ -16,6 +24,22 @@ const ConsultorDataForm = ({ consultor }) => {
     formState: { errors },
   } = useForm();
 
+  /**
+   * se obtiene el total de empleados guardados en DB y se obtiene
+   * aquel que inició sesión mediante el guardado del id en
+   * localstorage
+   */
+  useEffect(() => {
+    dispatch(fetchAllEmployees());
+    dispatch(fetchOneEmployee({ id }));
+  }, [dispatch, id]);
+
+  const changesSaved = useSelector(selectChangesSaved);
+  const consultor = useSelector(selectOneEmp);
+
+  /**
+   * se establecen los valores por defecto del formulario
+   */
   useEffect(() => {
     let defaultValues = {};
     defaultValues.name = consultor.name;
@@ -37,10 +61,7 @@ const ConsultorDataForm = ({ consultor }) => {
   }, [reset, consultor]);
 
   const onSubmit = (dataForm) => {
-    //console.log(data);
-
     const dataCompleted = {
-      id: consultor.id,
       role: consultor.role,
       phone: dataForm.phone,
       url_photo:
@@ -48,19 +69,17 @@ const ConsultorDataForm = ({ consultor }) => {
           ? `./img/${dataForm.url_photo[0].name}`
           : consultor.url_photo,
       biography: dataForm.biography,
-      //biography:
-      //  dataForm.biography !== "" ? dataForm.biography : consultor.biography,
       name: consultor.name,
-      last_name: consultor.surname,
+      surname: consultor.surname,
       division: consultor.division,
       subdivision: consultor.subdivision,
       email: dataForm.email,
       password: dataForm.password,
     };
 
-    console.log(dataCompleted);
-    dispatch(setEditConsultor({ id: consultor.id, data: dataCompleted }));
+    dispatch(setEditEmployee({ id: consultor._id, data: dataCompleted }));
   };
+
   return (
     <>
       <section className="pt-10 font-poppins page-height fondo_gradient_grey overflow-auto">
@@ -71,9 +90,9 @@ const ConsultorDataForm = ({ consultor }) => {
           </Link>
         </div>
         <form className="w-[90%] mx-auto" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex md:flex-row flex-col justify-between">
-            <div className="md:w-[45%] w-[100%] h-[60vh]">
-              <div className="flex justify-between mb-20">
+          <div className="flex md:flex-row flex-col md:justify-between">
+            <div className="md:w-[50%] sm:w-[80%] w-[100%] md:border-r-2 sm:px-10 md:order-1 order-2 mx-auto">
+              <div className="flex justify-between md:mb-10 my-2">
                 <label className={formCrud.label}>Seleccione una imagen:</label>
                 <input
                   type="file"
@@ -82,18 +101,17 @@ const ConsultorDataForm = ({ consultor }) => {
                   accept="image/png, image/gif, image/jpeg"
                 />
               </div>
-              <div className="flex justify-between mb-10">
+              <div className="flex justify-between my-4">
                 <label className={formCrud.label}>Biografía:</label>
                 <textarea
                   maxLength={500}
-                  autoFocus={true}
                   {...register("biography")}
-                  className="border-2 w-[80%] resize-none focus:outline-secondary h-[200px]"
+                  className="border-2 sm:w-[60%] w-[74%] resize-none focus:outline-secondary h-[200px] rounded-lg"
                 ></textarea>
               </div>
             </div>
 
-            <div className="md:w-[45%] w-[100%] h-[60vh] relative">
+            <div className="md:w-[50%] sm:w-[80%] w-[100%] md:border-l-2 sm:px-10 md:order-2 order-1 mx-auto">
               {editConsultor.map((input) => (
                 <div key={input.key}>
                   <div className={formCrud.divInput}>
@@ -111,21 +129,22 @@ const ConsultorDataForm = ({ consultor }) => {
                   </div>
                   <div className="relative">
                     {errors?.[input.regist] && (
-                      <span className="absolute mt-[-15px] right-0 text-xs text-red-500 font-bold">
+                      <span className="absolute mt-[-10px] right-0 text-xs text-red-500 font-bold">
                         Este campo es requerido.
                       </span>
                     )}
                   </div>
                 </div>
               ))}
-
-              <button
-                type="submit"
-                className="lg:absolute bottom-3 bg-secondary py-2 w-full rounded-md text-primary hover:bg-primary hover:text-white mt-10 mb-5"
-              >
-                Actualizar
-              </button>
             </div>
+          </div>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="bottom-3 bg-secondary py-2 w-[40%] rounded-md text-primary hover:bg-primary hover:text-white mt-5 mb-5"
+            >
+              Actualizar
+            </button>
           </div>
         </form>
       </section>

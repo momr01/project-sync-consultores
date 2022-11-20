@@ -1,10 +1,11 @@
-import React from 'react'
-
 const NotFound = () => (
-    <div className='page-height flex bg-slate-100'>
+  <div className="page-height flex bg-slate-100">
+    <img
+      src="/img/not-found.png"
+      alt="not-found"
+      className="w-[50%] mx-auto my-auto"
+    />
+  </div>
+);
 
-      <img src='./img/not-found.png' alt='not-found' className='w-[50%] mx-auto my-auto' />
-    </div>
-  )
-
-export default NotFound
+export default NotFound;

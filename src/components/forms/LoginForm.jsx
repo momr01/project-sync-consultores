@@ -1,18 +1,25 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 import { useAuth } from "../../auth/authProvider";
-import { users } from "../../helpers/variables";
 import { formLogin } from "../../style";
-import { useState } from "react";
 import { formLoginData } from "../../helpers/static";
-import { useSelector } from "react-redux";
-import { selectEmpItems } from "../../app/EmployeesSlice";
+import { fetchAllEmployees, selectEmpItems } from "../../app/EmployeesSlice";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const { login } = useAuth();
-  const allEmployees = useSelector(selectEmpItems);
 
   const [errorLogin, setErrorLogin] = useState(false);
+
+  /**
+   * se onbtienen de la DB todos los empleados
+   */
+  useEffect(() => {
+    dispatch(fetchAllEmployees());
+  }, [dispatch]);
+
+  const allEmployees = useSelector(selectEmpItems);
 
   const {
     register,
@@ -21,17 +28,12 @@ const LoginForm = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    //console.log(data);
-    //const response = await axios.get('http://localhost:3034/api/users');
-
-    //console.log(response.data)
-
     const itemIndex = allEmployees.findIndex(
       (emp) => emp.password === data.password && emp.email === data.email
     );
 
     if (itemIndex !== -1) {
-      login(allEmployees[itemIndex].role, allEmployees[itemIndex].id);
+      login(allEmployees[itemIndex].role, allEmployees[itemIndex]._id);
     } else {
       setErrorLogin(true);
     }
@@ -40,7 +42,7 @@ const LoginForm = () => {
   return (
     <>
       <form
-        className="flex flex-col md:w-[50%] w-[80%] mx-auto mt-20 font-poppins"
+        className="flex flex-col md:w-[50%] w-[90%] mx-auto mt-20 font-poppins"
         onSubmit={handleSubmit(onSubmit)}
       >
         {formLoginData.map((input) => (
@@ -91,9 +93,8 @@ const LoginForm = () => {
         </div>
         <div className="relative">
           {errorLogin && (
-            <div className="absolute border-2 mt-8 bg-red-200 text-red-500 rounded-lg text-lg font-bold text-center py-[4px]">
-              Error al intentar ingresar. Por favor verifique los datos
-              ingresados.
+            <div className="xl:absolute border-2 mt-8 bg-red-200 text-red-500 rounded-lg md:text-lg font-bold text-center py-[4px]">
+              Error al intentar ingresar. Por favor verifique los datos.
             </div>
           )}
         </div>

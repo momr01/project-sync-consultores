@@ -1,75 +1,7 @@
 import { createAction, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-
-const data = [
-  {
-    id: "1",
-    name: "John",
-    surname: "Brown",
-    role: "admin",
-    phone: 155677789,
-    division: "Software Factory",
-    subdivision: "Front-end",
-    //tags: ["nice", "developer", "loser", "cool", "teacher"],
-    email: "jb@jb.com",
-    password: "12345678",
-    url_photo: "./img/foto_perfil.jpg",
-    biography: "",
-  },
-  {
-    id: "2",
-    name: "Jim",
-    surname: "Green",
-    role: "user",
-    phone: 155677789,
-    division: "Software Factory",
-    subdivision: "Back-end",
-    //tags: ["nice", "developer"],
-    email: "jg@jg.com",
-    password: "12345678",
-    url_photo: "./img/foto_perfil.jpg",
-    biography: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
-    finibus aliquam eros, ac cursus ex iaculis quis. Curabitur
-    tincidunt in arcu in pulvinar. Nullam ultrices congue mattis.
-    Mauris molestie quis velit sed gravida. Ut ut nisl eget nunc
-    rutrum maximus sodales in ipsum. Pellentesque sed ornare mauris.
-    In mi risus, varius a finibus eget, interdum sed neque. Nunc ac
-    elit id lectus mollis rutrum ac sit amet libero. Vestibulum
-    efficitur justo vel pulvinar commodo. Donec sit amet orci vel dui
-    volutpat aliquet a euismod nunc. Cras hendrerit, libero id tempus
-    ultricies, orci eros ultricies nibh, id pellentesque diam ex ac
-    orci. Suspendisse a lobortis nisl.`,
-  },
-  {
-    id: "3",
-    name: "John",
-    surname: "Brown",
-    role: "admin",
-    phone: 155677789,
-    division: "SAP",
-    subdivision: "MM",
-    //tags: ["nice", "developer"],
-    email: "jb2@jb.com",
-    password: "12345678",
-    url_photo: "./img/foto_perfil.jpg",
-    biography: "",
-  },
-  {
-    id: "4",
-    name: "Joe",
-    surname: "Black",
-    role: "user",
-    phone: 155677789,
-    division: "SAP",
-    subdivision: "SAP2",
-    //tags: ["nice", "developer"],
-    email: "jb3@jb.com",
-    password: "12345678",
-    url_photo: "./img/foto_perfil.jpg",
-    biography: "",
-  },
-];
+import { URL } from "../helpers/url";
 
 /**
  * initialState
@@ -80,9 +12,9 @@ const data = [
  * changesSaved = true si los cambios al editar un empleado se guardan correctamente / false si no se ha procedido con la edicion
  */
 const initialState = {
-  employeesState: false,
-  employeesItems: data,
+  employeesItems: [],
   employeeItem: [],
+  employeeToEdit: [],
   changesSaved: false,
   searchItems: [],
 };
@@ -99,7 +31,6 @@ export const revertSearch = createAction("REVERT_SEARCH");
 const EmployeesSlice = createSlice({
   initialState,
   name: "employees",
-  //extraReducers: (builder) => builder.addCase(revertAll, () => initialState),
   extraReducers: (builder) => {
     builder.addCase(revertChangesSaved, (state, action) => {
       state.changesSaved = false;
@@ -126,15 +57,21 @@ const EmployeesSlice = createSlice({
      * reducer para agregar un nuevo empleado a la DB
      */
     setAddEmployee: (state, action) => {
-      state.employeesItems.push(action.payload);
-      toast.success(`Empleado agregado`, {
-        style: {
-          borderRadius: "10px",
-          fontSize: "1.3rem",
-          background: "#CCF6B6",
-          color: "#000",
-        },
-      });
+      axios
+        .post("http://localhost:3034/api/employees", action.payload)
+        .then((response) => {
+          if (response.statusText === "OK") {
+            toast.success(`Empleado agregado`, {
+              style: {
+                borderRadius: "10px",
+                fontSize: "1.3rem",
+                background: "#CCF6B6",
+                color: "#000",
+              },
+            });
+          }
+        })
+        .catch((err) => console.log(err));
     },
     /**
      *
@@ -144,86 +81,27 @@ const EmployeesSlice = createSlice({
      * implica la posibilidad de modificar todos los campos disponibles
      */
     setEditEmployee: (state, action) => {
-      let employeeEdited = [];
-      let dataEmployed = {};
-
       const itemIndex = state.employeesItems.findIndex(
-        (emp) => emp.id === action.payload.id
+        (emp) => emp._id === action.payload.id
       );
 
       if (itemIndex !== -1) {
         if (
           action.payload.data.name === state.employeesItems[itemIndex].name &&
-          action.payload.data.last_name ===
-            state.employeesItems[itemIndex].last_name &&
-          action.payload.data.phone == state.employeesItems[itemIndex].phone &&
+          action.payload.data.surname ===
+            state.employeesItems[itemIndex].surname &&
+          action.payload.data.phone === state.employeesItems[itemIndex].phone &&
           action.payload.data.email === state.employeesItems[itemIndex].email &&
           action.payload.data.password ===
             state.employeesItems[itemIndex].password &&
           action.payload.data.division ===
             state.employeesItems[itemIndex].division &&
           action.payload.data.subdivision ===
-            state.employeesItems[itemIndex].subdivision
-        ) {
-          toast.error(`Sin cambios para actualizar`, {
-            style: {
-              borderRadius: "10px",
-              background: "#FFB0B0",
-              fontSize: "1.3rem",
-              color: "#FF0000",
-            },
-          });
-        } else {
-          // dataEmployed = {
-          //   id: itemIndex+1,
-          //   name: action.payload.data.name
-          // }
-
-          // console.log(dataEmployed)
-          //state.employeesItems = state.employeesItems.splice(itemIndex, 1);
-
-          toast.success(`Se actualizaron los datos del consultor`, {
-            style: {
-              borderRadius: "10px",
-              fontSize: "1.3rem",
-              background: "#CCF6B6",
-              color: "#000",
-            },
-          });
-          state.changesSaved = true;
-        }
-      }
-    },
-    /**
-     *
-     * @param {*} state
-     * @param {*} action
-     * reducer para editar un empleado desde el perfil del mismo consultor o usuario
-     * implica la posibilidad de modificar sólo algunos datos como
-     * url_photo
-     * biography
-     * phone
-     * email
-     * password
-     */
-    setEditConsultor: (state, action) => {
-      let employeeEdited = [];
-      let dataEmployed = {};
-
-      const itemIndex = state.employeesItems.findIndex(
-        (emp) => emp.id === action.payload.id
-      );
-
-      if (itemIndex !== -1) {
-        if (
-          action.payload.data.url_photo ===
-            state.employeesItems[itemIndex].url_photo &&
+            state.employeesItems[itemIndex].subdivision &&
           action.payload.data.biography ===
             state.employeesItems[itemIndex].biography &&
-          action.payload.data.phone == state.employeesItems[itemIndex].phone &&
-          action.payload.data.email === state.employeesItems[itemIndex].email &&
-          action.payload.data.password ===
-            state.employeesItems[itemIndex].password
+          action.payload.data.url_photo ===
+            state.employeesItems[itemIndex].url_photo
         ) {
           toast.error(`Sin cambios para actualizar`, {
             style: {
@@ -234,27 +112,30 @@ const EmployeesSlice = createSlice({
             },
           });
         } else {
-          // dataEmployed = {
-          //   id: itemIndex+1,
-          //   name: action.payload.data.name
-          // }
+          axios
+            .put(
+              `http://localhost:3034/api/employees/${action.payload.id}`,
+              action.payload.data
+            )
+            .then((response) => {
+              console.log(response);
+              if (response.statusText === "OK") {
+                toast.success(`Se actualizaron los datos del consultor`, {
+                  style: {
+                    borderRadius: "10px",
+                    fontSize: "1.3rem",
+                    background: "#CCF6B6",
+                    color: "#000",
+                  },
+                });
+              }
+            })
+            .catch((err) => console.log(err));
 
-          // console.log(dataEmployed)
-          //state.employeesItems = state.employeesItems.splice(itemIndex, 1);
-
-          toast.success(`Se actualizaron los datos del consultor`, {
-            style: {
-              borderRadius: "10px",
-              fontSize: "1.3rem",
-              background: "#CCF6B6",
-              color: "#000",
-            },
-          });
           state.changesSaved = true;
         }
       }
     },
-    setDeleteEmployee: (state, action) => {},
     /**
      *
      * @param {*} state
@@ -265,14 +146,39 @@ const EmployeesSlice = createSlice({
     setOneEmployee: (state, action) => {
       state.employeeItem = [];
       const itemIndex = state.employeesItems.findIndex(
-        (emp) => emp.id === action.payload.id
+        (emp) => emp._id === action.payload.id
       );
 
       if (itemIndex !== -1) {
         state.employeeItem = state.employeesItems[itemIndex];
       }
     },
-    setOneByEmailPass: (state, action) => {},
+    /**
+     *
+     * @param {*} state
+     * @param {*} action
+     * reducer para separar del total de consultores, aquel que va a ser editado
+     */
+    setOneEmployeeToEdit: (state, action) => {
+      state.employeeToEdit = action.payload;
+    },
+    /**
+     *
+     * @param {*} state
+     * @param {*} action
+     * reducer para separar del total de consultores, uno que será buscado
+     * mediante id
+     */
+    setOneEmployeeById: (state, action) => {
+      state.employeeItem = action.payload;
+    },
+    /**
+     *
+     * @param {*} state
+     * @param {*} action
+     * reducer para filtrar del total de consultores, aquellos que
+     * el usuario desea buscar por nombre y/o apellido
+     */
     setSearchItems: (state, action) => {
       state.searchItems = action.payload.data;
     },
@@ -284,12 +190,13 @@ export const {
   setAddEmployee,
   setOneEmployee,
   setEditEmployee,
-  setEditConsultor,
   setSearchItems,
+  setOneEmployeeById,
+  setOneEmployeeToEdit,
 } = EmployeesSlice.actions;
 
 //exporto estados
-export const selectEmpState = (state) => state.employees.employeesState;
+export const selectOneEmpToEdit = (state) => state.employees.employeeToEdit;
 export const selectEmpItems = (state) => state.employees.employeesItems;
 export const selectOneEmp = (state) => state.employees.employeeItem;
 export const selectChangesSaved = (state) => state.employees.changesSaved;
@@ -297,11 +204,72 @@ export const selectSearchItems = (state) => state.employees.searchItems;
 
 export default EmployeesSlice.reducer;
 
+/**
+ *
+ * @returns
+ * se hace llamada a api para obtener el total de empleados (consultores
+ * y administradores o personal de RRHH
+ */
 export const fetchAllEmployees = () => (dispatch) => {
   axios
-    .get("https://reqres.in/api/users?per_page=12")
+    .get(`${URL}`)
     .then((response) => {
-      dispatch(setEmployeesList(response.data.data));
+      dispatch(setEmployeesList(response.data));
     })
     .catch((err) => console.log(err));
 };
+
+/**
+ *
+ * @param {*} param0
+ * @returns
+ * se hace llamada a api para obtener un único empleado según id
+ * y se destina a reducer setOneEmployeeById
+ */
+export const fetchOneEmployee =
+  ({ id }) =>
+  (dispatch) => {
+    axios
+      .get(`${URL}/${id}`)
+      .then((response) => {
+        dispatch(setOneEmployeeById(response.data));
+      })
+      .catch((err) => console.log(err));
+  };
+
+/**
+ *
+ * @param {*} param0
+ * @returns
+ * se hace llamada a api para obtener un único empleado según id y
+ * se destina a setOneEmployeeToEdit
+ */
+export const fetchOneEmployeeToEdit =
+  ({ id }) =>
+  (dispatch) => {
+    axios
+      .get(`${URL}/${id}`)
+      .then((response) => {
+        dispatch(setOneEmployeeToEdit(response.data));
+      })
+      .catch((err) => console.log(err));
+  };
+
+/**
+ *
+ * @param {*} param0
+ * @returns
+ * se hace llamada a api para eliminar un empleado, a partir de un id
+ * luego se hace llamada nuevamente al total
+ * para así traer todos los que quedan sin el reciente eliminado
+ */
+export const deleteOneEmployee =
+  ({ id }) =>
+  (dispatch) => {
+    axios
+      .delete(`${URL}/${id}`)
+      .then((response) => {
+        dispatch(fetchAllEmployees());
+      })
+      .catch((err) => console.log(err));
+  };

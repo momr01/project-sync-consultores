@@ -16,13 +16,17 @@ const AppRouter = () => (
 
       <Route path="/admin" element={<PrivateRoute />}>
         <Route index element={<Admin />}></Route>
-        <Route path="/admin/edit/:id" element={<ManageEditCons />}></Route>
+        <Route path="/admin/cons/edit/:id" element={<ManageEditCons />}></Route>
+        <Route
+          path="/admin/admin/edit/:id"
+          element={<ConsultorEditData />}
+        ></Route>
       </Route>
 
       <Route path="/consultor" element={<PrivateRoute />}>
         <Route index element={<Consultor />}></Route>
         <Route
-          path="/consultor/edit/:id"
+          path="/consultor/cons/edit/:id"
           element={<ConsultorEditData />}
         ></Route>
       </Route>
