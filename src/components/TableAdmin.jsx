@@ -1,14 +1,21 @@
 import { useSelector, useDispatch } from "react-redux";
 import {
   deleteOneEmployee,
+  fetchAllEmployees,
   selectEmpItems,
   selectSearchItems,
 } from "../app/EmployeesSlice";
 import { colAdminPage } from "../helpers/static";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const TableAdmin = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("re-render")
+    dispatch(fetchAllEmployees());
+  }, [dispatch]);
 
   /**
    * filtrar empleados que son user o consultores
@@ -18,7 +25,7 @@ const TableAdmin = () => {
   const empleados = useSelector(selectEmpItems).filter(
     (emp) => emp.role !== "admin"
   );
- 
+
   /**
    * filtrar empleados que son user o consultores y que a su vez el admin
    * o personal de RRHH desea buscar específicamente
@@ -28,8 +35,8 @@ const TableAdmin = () => {
   );
 
   /**
-   * 
-   * @param {*} data 
+   *
+   * @param {*} data
    * funcion para borrar un consultor de la DB
    */
   const deleteConsultor = (data) => {

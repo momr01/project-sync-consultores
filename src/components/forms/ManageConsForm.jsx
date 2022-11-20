@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import {
   fetchAllEmployees,
   fetchOneEmployeeToEdit,
@@ -16,7 +16,6 @@ import { formCrud } from "../../style";
 const ManageConsForm = ({ add, setIsOpen }) => {
   const dispatch = useDispatch();
   const history = useLocation();
-  const navigate = useNavigate();
 
   /**
    *
@@ -163,8 +162,8 @@ const ManageConsForm = ({ add, setIsOpen }) => {
           </button>
         </div>
       </form>
-      {/* {changesSaved && <Navigate to="/admin" replace={true} />} */}
-      {changesSaved && navigate("/admin")}
+      {changesSaved && <Navigate to="/admin" replace={true} />}
+     
     </>
   );
 };

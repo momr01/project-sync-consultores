@@ -42,7 +42,7 @@ const Admin = () => {
     dispatch(fetchOneEmployee({ id }));
     dispatch(revertChangesSaved());
     dispatch(revertSearch());
-  }, [dispatch, id]);
+  }, [dispatch, id, isOpen]);
 
   const { Content, Sider } = Layout;
   function getItem(label, key, icon, items) {
