@@ -118,8 +118,8 @@ const EmployeesSlice = createSlice({
               action.payload.data
             )
             .then((response) => {
-              console.log(response);
-              if (response.statusText === "OK") {
+              // console.log(response);
+              // if (response.statusText === "OK") {
                 toast.success(`Se actualizaron los datos del consultor`, {
                   style: {
                     borderRadius: "10px",
@@ -128,7 +128,7 @@ const EmployeesSlice = createSlice({
                     color: "#000",
                   },
                 });
-              }
+              //}
             })
             .catch((err) => console.log(err));
 
