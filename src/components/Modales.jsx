@@ -20,7 +20,7 @@ const Modales = ({ isOpen, setIsOpen, add }) => {
     footer={null}
     width={1000}
   >
-    <ManageConsForm add={add} setIsOpen={setIsOpen} />
+    <ManageConsForm add={add} setIsOpen={closeModal} />
   </Modal>
 )}
 

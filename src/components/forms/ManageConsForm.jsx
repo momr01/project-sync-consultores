@@ -88,7 +88,7 @@ const ManageConsForm = ({ add, setIsOpen }) => {
       dispatch(setAddEmployee(dataCompleted));
       dispatch(fetchAllEmployees());
       reset();
-      setIsOpen(false);
+      setIsOpen();
     } else {
       dispatch(setEditEmployee({ id: data._id, data: dataCompleted }));
     }
