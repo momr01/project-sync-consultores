@@ -58,7 +58,7 @@ const EmployeesSlice = createSlice({
      */
     setAddEmployee: (state, action) => {
       axios
-        .post("http://localhost:3034/api/employees", action.payload)
+        .post(`${URL}`, action.payload)
         .then((response) => {
           if (response.statusText === "OK") {
             toast.success(`Empleado agregado`, {
@@ -114,7 +114,7 @@ const EmployeesSlice = createSlice({
         } else {
           axios
             .put(
-              `http://localhost:3034/api/employees/${action.payload.id}`,
+              `${URL}/${action.payload.id}`,
               action.payload.data
             )
             .then((response) => {
