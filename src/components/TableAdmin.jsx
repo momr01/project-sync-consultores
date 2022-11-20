@@ -2,7 +2,9 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   deleteOneEmployee,
   fetchAllEmployees,
+  selectChangesSaved,
   selectEmpItems,
+  selectModalState,
   selectSearchItems,
 } from "../app/EmployeesSlice";
 import { colAdminPage } from "../helpers/static";
@@ -12,9 +14,12 @@ import { useEffect } from "react";
 const TableAdmin = () => {
   const dispatch = useDispatch();
 
+  const modalState = useSelector(selectModalState);
+  console.log(modalState)
+
   useEffect(() => {
     dispatch(fetchAllEmployees());
-  }, [dispatch]);
+  }, [dispatch, modalState]);
 
   /**
    * filtrar empleados que son user o consultores

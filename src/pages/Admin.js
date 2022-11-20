@@ -17,9 +17,7 @@ import {
   fetchAllEmployees,
   fetchOneEmployee,
   revertChangesSaved,
-  revertSearch,
-  selectModalState,
-  setModalState,
+  revertSearch
 } from "../app/EmployeesSlice";
 import { useAuth } from "../auth/authProvider";
 
@@ -39,16 +37,12 @@ const Admin = () => {
    * se revierten los cambios que genera el buscar un empleado
    *
    */
-  const modalIsOpen = useSelector(selectModalState);
-
   useEffect(() => {
     dispatch(fetchAllEmployees());
     dispatch(fetchOneEmployee({ id }));
     dispatch(revertChangesSaved());
     dispatch(revertSearch());
-  }, [dispatch, id, modalIsOpen]);
-
-  console.log(modalIsOpen);
+  }, [dispatch, id]);
 
   const { Content, Sider } = Layout;
   function getItem(label, key, icon, items) {
