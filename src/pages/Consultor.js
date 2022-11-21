@@ -5,6 +5,7 @@ import { colConsultorPage } from "../helpers/static";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
+  fetchAllEmployees,
   fetchOneEmployee,
   revertChangesSaved,
   selectOneEmp,
@@ -20,6 +21,7 @@ const User = () => {
    * se revierten los cambios que ocasiona el editar un empleado
    */
   useEffect(() => {
+    dispatch(fetchAllEmployees())
     dispatch(fetchOneEmployee({ id }));
     dispatch(revertChangesSaved());
   }, [dispatch, id]);
