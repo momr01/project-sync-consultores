@@ -27,6 +27,7 @@ const initialState = {
  */
 export const revertAll = createAction("REVERT_ALL");
 export const revertChangesSaved = createAction("REVERT_CHANGESSAVED");
+export const revertModalState = createAction("REVERT_MODAL");
 export const revertSearch = createAction("REVERT_SEARCH");
 
 const EmployeesSlice = createSlice({
@@ -39,6 +40,9 @@ const EmployeesSlice = createSlice({
     builder.addCase(revertAll, () => initialState);
     builder.addCase(revertSearch, (state, action) => {
       state.searchItems = [];
+    });
+    builder.addCase(revertModalState, (state, action) => {
+      state.modalIsOpen = false;
     });
   },
   reducers: {
@@ -114,25 +118,19 @@ const EmployeesSlice = createSlice({
           });
         } else {
           axios
-            .put(
-              `${URL}/${action.payload.id}`,
-              action.payload.data
-            )
+            .put(`${URL}/${action.payload.id}`, action.payload.data)
             .then((response) => {
-              // console.log(response);
-              // if (response.statusText === "OK") {
-                toast.success(`Se actualizaron los datos del consultor`, {
-                  style: {
-                    borderRadius: "10px",
-                    fontSize: "1.3rem",
-                    background: "#CCF6B6",
-                    color: "#000",
-                  },
-                });
+              toast.success(`Se actualizaron los datos del consultor`, {
+                style: {
+                  borderRadius: "10px",
+                  fontSize: "1.3rem",
+                  background: "#CCF6B6",
+                  color: "#000",
+                },
+              });
               //}
             })
             .catch((err) => console.log(err));
-
           state.changesSaved = true;
         }
       }
@@ -183,9 +181,9 @@ const EmployeesSlice = createSlice({
     setSearchItems: (state, action) => {
       state.searchItems = action.payload.data;
     },
-    setModalState: (state, action)=> {
+    setModalState: (state, action) => {
       state.modalIsOpen = !state.modalIsOpen;
-    }
+    },
   },
 });
 
@@ -197,7 +195,7 @@ export const {
   setSearchItems,
   setOneEmployeeById,
   setOneEmployeeToEdit,
-  setModalState
+  setModalState,
 } = EmployeesSlice.actions;
 
 //exporto estados
@@ -276,6 +274,51 @@ export const deleteOneEmployee =
       .delete(`${URL}/${id}`)
       .then((response) => {
         dispatch(fetchAllEmployees());
+      })
+      .catch((err) => console.log(err));
+  };
+
+export const updateOneEmployee =
+  ({ id, data }) =>
+  (dispatch) => {
+    const dataFromDB = [];
+    axios
+      .get(`${URL}/${id}`)
+      .then((response) => {
+        dataFromDB.push(response.data);
+
+        if (
+          dataFromDB[0].phone === data.phone &&
+          dataFromDB[0].email === data.email &&
+          dataFromDB[0].password === data.password &&
+          dataFromDB[0].url_photo === data.url_photo &&
+          dataFromDB[0].biography === data.biography
+        ) {
+          toast.error(`Sin cambios para actualizar`, {
+            style: {
+              borderRadius: "10px",
+              background: "#FFB0B0",
+              fontSize: "1.3rem",
+              color: "#FF0000",
+            },
+          });
+        } else {
+          axios
+            .put(`${URL}/${id}`, data)
+            .then((response) => {
+              dispatch(setOneEmployeeToEdit({ id }));
+              dispatch(setModalState());
+              toast.success(`Se actualizaron los datos del consultor`, {
+                style: {
+                  borderRadius: "10px",
+                  fontSize: "1.3rem",
+                  background: "#CCF6B6",
+                  color: "#000",
+                },
+              });
+            })
+            .catch((err) => console.log(err));
+        }
       })
       .catch((err) => console.log(err));
   };

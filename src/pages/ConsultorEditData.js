@@ -1,5 +1,7 @@
 import { ConsultorDataForm } from "../components";
 
-const ConsultorEditData = () => <ConsultorDataForm />;
+const ConsultorEditData = () => { 
+  return <ConsultorDataForm />;
+};
 
 export default ConsultorEditData;

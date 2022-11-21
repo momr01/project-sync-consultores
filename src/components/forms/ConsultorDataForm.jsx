@@ -1,13 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import {
   fetchAllEmployees,
   fetchOneEmployee,
+  fetchOneEmployeeToEdit,
   selectChangesSaved,
+  selectModalState,
   selectOneEmp,
+  selectOneEmpToEdit,
   setEditEmployee,
+  setModalState,
+  updateOneEmployee,
 } from "../../app/EmployeesSlice";
 import { useAuth } from "../../auth/authProvider";
 import { editConsultor } from "../../helpers/static";
@@ -31,11 +36,11 @@ const ConsultorDataForm = () => {
    */
   useEffect(() => {
     dispatch(fetchAllEmployees());
-    dispatch(fetchOneEmployee({ id }));
+    dispatch(fetchOneEmployeeToEdit({ id }));
   }, [dispatch, id]);
 
-  const changesSaved = useSelector(selectChangesSaved);
-  const consultor = useSelector(selectOneEmp);
+  const changesSaved = useSelector(selectModalState);
+  const consultor = useSelector(selectOneEmpToEdit);
 
   /**
    * se establecen los valores por defecto del formulario
@@ -77,7 +82,7 @@ const ConsultorDataForm = () => {
       password: dataForm.password,
     };
 
-    dispatch(setEditEmployee({ id: consultor._id, data: dataCompleted }));
+    dispatch(updateOneEmployee({ id: consultor._id, data: dataCompleted }));
   };
 
   return (

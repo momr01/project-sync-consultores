@@ -14,7 +14,7 @@ const TableAdmin = () => {
   const dispatch = useDispatch();
 
   const modalState = useSelector(selectModalState);
-  console.log(modalState)
+  //console.log(modalState)
 
   useEffect(() => {
     dispatch(fetchAllEmployees());
