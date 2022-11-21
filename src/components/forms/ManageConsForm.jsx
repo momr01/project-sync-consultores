@@ -117,8 +117,8 @@ const ManageConsForm = ({ add, setIsOpen }) => {
 
   return (
     <>
-      <div className="flex py-4 justify-center pt-10">
-        <h2 className="font-poppins text-3xl my-auto mr-5 font-bold text-primary">
+      <div className="flex py-4 justify-center ss:pt-10 ss:flex-row flex-col">
+        <h2 className="font-poppins text-3xl ss:my-auto mb-5 mr-5 font-bold text-primary text-center ss:order-1 order-2">
           {add ? (
             "Agregar un nuevo consultor"
           ) : data?.name ? (
@@ -128,7 +128,7 @@ const ManageConsForm = ({ add, setIsOpen }) => {
           )}
         </h2>
         {!add && (
-          <Link className="my-auto hover:underline" to={routes.home}>
+          <Link className="ss:my-auto mb-5 hover:underline ss:order-2 order-1 ml-3 ss:ml-0" to={routes.home}>
             Volver
           </Link>
         )}
