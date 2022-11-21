@@ -47,7 +47,7 @@ const HeaderAdmin = () => {
     <>
       <div className="flex sm:justify-between flex-col sm:flex-row pt-10">
         <div className="my-auto">
-          <h1 className="text-3xl font-poppins text-primary font-bold mb-0">
+          <h1 className="text-3xl font-poppins text-primary font-bold ss:mb-0">
             Lista de consultores
           </h1>
         </div>
@@ -56,7 +56,7 @@ const HeaderAdmin = () => {
           <input
             type="text"
             placeholder="Buscar por nombre o apellido..."
-            className="border-2 p-3 mr-2 focus:outline-secondary w-60 rounded-lg"
+            className="border-2 p-3 mr-2 focus:outline-secondary w-60 rounded-lg ss:mb-0 mb-3"
             {...register("search")}
             onChange={handleChange}
           />

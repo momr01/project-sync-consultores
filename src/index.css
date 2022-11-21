@@ -17,6 +17,10 @@
   .page-height {
     height: calc(100vh - 72px - 56px);
   }
+
+  .page-height-login {
+    height: calc(100vh - 60px - 56px);
+  }
 }
 
 .ant-layout-sider-trigger svg {

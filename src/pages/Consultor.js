@@ -11,6 +11,7 @@ import {
   revertModalState,
   selectOneEmpToEdit,
 } from "../app/EmployeesSlice";
+import routes from "../helpers/routes";
 
 const User = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const User = () => {
           )}
 
           <div className="ss:my-auto mb-5">
-            <Link to={`/consultor/cons/edit/${consultor._id}`}>
+            <Link to={routes.consultorEditOwn(consultor._id)}>
               Editar datos
             </Link>
           </div>

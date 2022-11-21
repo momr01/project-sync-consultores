@@ -10,6 +10,7 @@ import {
   setAddEmployee,
   setEditEmployee,
 } from "../../app/EmployeesSlice";
+import routes from "../../helpers/routes";
 import { formData } from "../../helpers/static";
 import { formCrud } from "../../style";
 import { Loading } from "../index";
@@ -60,13 +61,33 @@ const ManageConsForm = ({ add, setIsOpen }) => {
    */
   useEffect(() => {
     let defaultValues = {};
-    defaultValues.name = !add ? `${data?.name}` : "";
-    defaultValues.surname = !add ? `${data?.surname}` : "";
-    defaultValues.phone = !add ? `${data?.phone}` : "";
+    defaultValues.name = !add
+      ? data?.name
+        ? `${data?.name}`
+        : "Cargando..."
+      : "";
+    defaultValues.surname = !add
+      ? data?.surname
+        ? `${data?.surname}`
+        : "Cargando..."
+      : "";
+    defaultValues.phone = !add
+      ? data?.phone
+        ? `${data?.phone}`
+        : "Cargando..."
+      : "";
     defaultValues.division = !add ? `${data?.division}` : "Software Factory";
     defaultValues.subdivision = !add ? `${data?.subdivision}` : "Front-end";
-    defaultValues.email = !add ? `${data?.email}` : "";
-    defaultValues.password = !add ? `${data?.password}` : "";
+    defaultValues.email = !add
+      ? data?.email
+        ? `${data?.email}`
+        : "Cargando..."
+      : "";
+    defaultValues.password = !add
+      ? data?.password
+        ? `${data?.password}`
+        : "Cargando..."
+      : "";
     reset({ ...defaultValues });
   }, [reset, data, add]);
 
@@ -107,7 +128,7 @@ const ManageConsForm = ({ add, setIsOpen }) => {
           )}
         </h2>
         {!add && (
-          <Link className="my-auto hover:underline" to="/">
+          <Link className="my-auto hover:underline" to={routes.home}>
             Volver
           </Link>
         )}
@@ -167,7 +188,7 @@ const ManageConsForm = ({ add, setIsOpen }) => {
           </button>
         </div>
       </form>
-      {changesSaved && <Navigate to="/admin" replace={true} />}
+      {changesSaved && <Navigate to={routes.admin} replace={true} />}
     </>
   );
 };

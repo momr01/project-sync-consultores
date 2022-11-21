@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useMemo,
+  useEffect,
 } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-hot-toast";
@@ -53,6 +54,7 @@ export function AuthProvider({ children }) {
     setId("");
     dispatch(revertAll());
   }, []);
+  
 
   //usememo porque no quiero crear este objeto cada vez, sino memorizar el valor y que solo cambie cuando
   //alguna de las dependencias cambie

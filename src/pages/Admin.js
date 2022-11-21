@@ -47,9 +47,6 @@ const Admin = () => {
     dispatch(revertModalState());
   }, [dispatch, id]);
 
-  const modalState = useSelector(selectModalState)
-  console.log(modalState)
-
   const { Content, Sider } = Layout;
   function getItem(label, key, icon, items) {
     return {

@@ -10,6 +10,7 @@ import {
   updateOneEmployee,
 } from "../../app/EmployeesSlice";
 import { useAuth } from "../../auth/authProvider";
+import routes from "../../helpers/routes";
 import { editConsultor } from "../../helpers/static";
 import { formCrud } from "../../style";
 
@@ -84,8 +85,10 @@ const ConsultorDataForm = () => {
     <>
       <section className="ss:pt-10 pt-5 font-poppins page-height overflow-auto">
         <div className="mb-10 flex ss:justify-center mx-5 ss:mx-0 flex-col ss:flex-row">
-          <h2 className="text-[30px] my-auto mr-10 text-center ss:order-1 order-2">Actualizar datos</h2>
-          <Link className="ss:my-auto mb-5 ss:order-2 order-1" to="/">
+          <h2 className="text-[30px] my-auto mr-10 text-center ss:order-1 order-2">
+            Actualizar datos
+          </h2>
+          <Link className="ss:my-auto mb-5 ss:order-2 order-1" to={routes.home}>
             Volver
           </Link>
         </div>
@@ -148,7 +151,7 @@ const ConsultorDataForm = () => {
           </div>
         </form>
       </section>
-      {changesSaved && <Navigate to="/" replace={true} />}
+      {changesSaved && <Navigate to={routes.home} replace={true} />}
     </>
   );
 };

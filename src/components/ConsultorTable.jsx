@@ -1,8 +1,7 @@
-import { colConsultorPage } from "../helpers/static"
+import { colConsultorPage } from "../helpers/static";
 
-const ConsultorTable = ({consultor}) => {
-  return (
-    <div>
+const ConsultorTable = ({ consultor }) => (
+  <div>
     <table className="w-full mt-10 rounded-md mb-10">
       <thead className="bg-gray-50 border-b-2 border-gray-200">
         <tr>
@@ -37,7 +36,6 @@ const ConsultorTable = ({consultor}) => {
       </tbody>
     </table>
   </div>
-  )
-}
+);
 
-export default ConsultorTable
+export default ConsultorTable;

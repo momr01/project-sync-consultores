@@ -9,6 +9,7 @@ import {
 import { colAdminPage } from "../helpers/static";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import routes from "../helpers/routes";
 
 const TableAdmin = () => {
   const dispatch = useDispatch();
@@ -105,7 +106,7 @@ const TrTable = ({ empleado, index, deleteFunc }) => (
     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
       <Link
         className="btn bg-green-200 text-green-800 p-1 rounded-md hover:bg-green-800 hover:text-green-200 mr-5"
-        to={`/admin/cons/edit/${empleado._id}`}
+        to={routes.adminEditOther(empleado._id)}
       >
         Editar
       </Link>

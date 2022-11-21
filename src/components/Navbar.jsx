@@ -4,6 +4,7 @@ import { useAuth } from "../auth/authProvider";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOneEmployee, selectOneEmp } from "../app/EmployeesSlice";
+import routes from "../helpers/routes";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -60,8 +61,8 @@ const Navbar = () => {
                     <Link
                       to={
                         consultor?.role === "user"
-                          ? `/consultor/cons/edit/${consultor._id}`
-                          : `/admin/admin/edit/${consultor._id}`
+                          ? routes.consultorEditOwn(consultor._id)
+                          : routes.adminEditOwn(consultor._id)
                       }
                       className="text-white"
                     >
