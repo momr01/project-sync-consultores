@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Layout, Menu } from "antd";
 import {
   PieChartOutlined,
@@ -19,6 +19,7 @@ import {
   revertChangesSaved,
   revertModalState,
   revertSearch,
+  selectModalState,
 } from "../app/EmployeesSlice";
 import { useAuth } from "../auth/authProvider";
 
@@ -45,6 +46,9 @@ const Admin = () => {
     dispatch(revertSearch());
     dispatch(revertModalState());
   }, [dispatch, id]);
+
+  const modalState = useSelector(selectModalState)
+  console.log(modalState)
 
   const { Content, Sider } = Layout;
   function getItem(label, key, icon, items) {

@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import Chart from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllEmployees, selectEmpItems } from "../app/EmployeesSlice";
+import { fetchAllEmployees, selectEmpItems, selectModalState } from "../app/EmployeesSlice";
 
 const ShowCharts = () => {
   const dispatch = useDispatch();
 
+  const modalState = useSelector(selectModalState)
   /**
    * obtener desde la DB todos los empleados
    */
   useEffect(() => {
     dispatch(fetchAllEmployees());
-  }, [dispatch]);
+  }, [dispatch, modalState]);
 
   const employees = useSelector(selectEmpItems);
 

@@ -1,17 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate } from "react-router-dom";
 import {
   fetchAllEmployees,
-  fetchOneEmployee,
   fetchOneEmployeeToEdit,
   selectChangesSaved,
-  selectModalState,
-  selectOneEmp,
   selectOneEmpToEdit,
-  setEditEmployee,
-  setModalState,
   updateOneEmployee,
 } from "../../app/EmployeesSlice";
 import { useAuth } from "../../auth/authProvider";
@@ -39,7 +34,7 @@ const ConsultorDataForm = () => {
     dispatch(fetchOneEmployeeToEdit({ id }));
   }, [dispatch, id]);
 
-  const changesSaved = useSelector(selectModalState);
+  const changesSaved = useSelector(selectChangesSaved);
   const consultor = useSelector(selectOneEmpToEdit);
 
   /**
@@ -87,10 +82,10 @@ const ConsultorDataForm = () => {
 
   return (
     <>
-      <section className="pt-10 font-poppins page-height fondo_gradient_grey overflow-auto">
-        <div className="mb-10 flex justify-center">
-          <h2 className="text-[30px] my-auto mr-10">Actualizar datos</h2>
-          <Link className="my-auto" to="/">
+      <section className="ss:pt-10 pt-5 font-poppins page-height overflow-auto">
+        <div className="mb-10 flex ss:justify-center mx-5 ss:mx-0 flex-col ss:flex-row">
+          <h2 className="text-[30px] my-auto mr-10 text-center ss:order-1 order-2">Actualizar datos</h2>
+          <Link className="ss:my-auto mb-5 ss:order-2 order-1" to="/">
             Volver
           </Link>
         </div>

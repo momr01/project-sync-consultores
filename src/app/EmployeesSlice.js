@@ -62,21 +62,36 @@ const EmployeesSlice = createSlice({
      * reducer para agregar un nuevo empleado a la DB
      */
     setAddEmployee: (state, action) => {
-      axios
+      const addEmployee = axios
         .post(`${URL}`, action.payload)
         .then((response) => {
-          if (response.statusText === "OK") {
-            toast.success(`Empleado agregado`, {
-              style: {
-                borderRadius: "10px",
-                fontSize: "1.3rem",
-                background: "#CCF6B6",
-                color: "#000",
-              },
-            });
-          }
+          // if (response.statusText === "OK") {
+          // toast.success(`Empleado agregado`, {
+          //   style: {
+          //     borderRadius: "10px",
+          //     fontSize: "1.3rem",
+          //     background: "#CCF6B6",
+          //     color: "#000",
+          //   },
+          // });
+          // }
         })
         .catch((err) => console.log(err));
+
+      toast.promise(
+        addEmployee,
+        {
+          loading: "Agregando empleado",
+          success: "Empleado agregado exitosamente!",
+          error: "ERROR! No se pudo agregar el empleado...",
+        },
+        {
+          style: {
+            fontSize: "1.3rem",
+            textAlign: "center",
+          },
+        }
+      );
     },
     /**
      *
@@ -117,20 +132,34 @@ const EmployeesSlice = createSlice({
             },
           });
         } else {
-          axios
+          const updateEmployee = axios
             .put(`${URL}/${action.payload.id}`, action.payload.data)
             .then((response) => {
-              toast.success(`Se actualizaron los datos del consultor`, {
-                style: {
-                  borderRadius: "10px",
-                  fontSize: "1.3rem",
-                  background: "#CCF6B6",
-                  color: "#000",
-                },
-              });
+              // toast.success(`Se actualizaron los datos del consultor`, {
+              //   style: {
+              //     borderRadius: "10px",
+              //     fontSize: "1.3rem",
+              //     background: "#CCF6B6",
+              //     color: "#000",
+              //   },
+              // });
               //}
             })
             .catch((err) => console.log(err));
+          toast.promise(
+            updateEmployee,
+            {
+              loading: "Editanto empleado",
+              success: "Empleado modificado exitosamente!",
+              error: "ERROR! No se pudo modificar el empleado...",
+            },
+            {
+              style: {
+                fontSize: "1.3rem",
+                textAlign: "center",
+              },
+            }
+          );
           state.changesSaved = true;
         }
       }
@@ -182,7 +211,11 @@ const EmployeesSlice = createSlice({
       state.searchItems = action.payload.data;
     },
     setModalState: (state, action) => {
+      //state.modalIsOpen = !state.modalIsOpen;
       state.modalIsOpen = !state.modalIsOpen;
+    },
+    setChangesSaved: (state, action) => {
+      state.changesSaved = true;
     },
   },
 });
@@ -196,6 +229,7 @@ export const {
   setOneEmployeeById,
   setOneEmployeeToEdit,
   setModalState,
+  setChangesSaved,
 } = EmployeesSlice.actions;
 
 //exporto estados
@@ -270,12 +304,27 @@ export const fetchOneEmployeeToEdit =
 export const deleteOneEmployee =
   ({ id }) =>
   (dispatch) => {
-    axios
+    const deleteEmployee = axios
       .delete(`${URL}/${id}`)
       .then((response) => {
         dispatch(fetchAllEmployees());
       })
       .catch((err) => console.log(err));
+
+    toast.promise(
+      deleteEmployee,
+      {
+        loading: "Eliminando",
+        success: "Empleado eliminado exitosamente!",
+        error: "ERROR! No se pudo eliminar el empleado...",
+      },
+      {
+        style: {
+          fontSize: "1.3rem",
+          textAlign: "center",
+        },
+      }
+    );
   };
 
 export const updateOneEmployee =
@@ -303,21 +352,37 @@ export const updateOneEmployee =
             },
           });
         } else {
-          axios
+          const updateEmployee = axios
             .put(`${URL}/${id}`, data)
             .then((response) => {
               dispatch(setOneEmployeeToEdit({ id }));
-              dispatch(setModalState());
-              toast.success(`Se actualizaron los datos del consultor`, {
-                style: {
-                  borderRadius: "10px",
-                  fontSize: "1.3rem",
-                  background: "#CCF6B6",
-                  color: "#000",
-                },
-              });
+              //dispatch(setModalState());
+              dispatch(setChangesSaved());
+              // toast.success(`Se actualizaron los datos del consultor`, {
+              //   style: {
+              //     borderRadius: "10px",
+              //     fontSize: "1.3rem",
+              //     background: "#CCF6B6",
+              //     color: "#000",
+              //   },
+              // });
             })
             .catch((err) => console.log(err));
+
+          toast.promise(
+            updateEmployee,
+            {
+              loading: "Editanto empleado",
+              success: "Empleado modificado exitosamente!",
+              error: "ERROR! No se pudo modificar el empleado...",
+            },
+            {
+              style: {
+                fontSize: "1.3rem",
+                textAlign: "center",
+              },
+            }
+          );
         }
       })
       .catch((err) => console.log(err));

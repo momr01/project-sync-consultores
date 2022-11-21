@@ -39,8 +39,11 @@ const Navbar = () => {
           {isAuthenticated && (
             <li className="flex cursor-pointer" onClick={handleOpen}>
               {consultor?._id && (
-                <div className="my-auto flex">
-                  <p className="my-auto mr-2 hover:text-secondary ss:text-base">{`${consultor.name} ${consultor.surname}`}</p>
+                <div className="my-auto flex hover:text-secondary">
+                  <div className="ss:flex ss:mr-2 mr-1 text-end ss:text-start ss:text-base">
+                    <p className="my-auto ss:mr-2">{`${consultor.name} `}</p>
+                    <p className="my-auto">{`${consultor.surname}`}</p>
+                  </div>
                   <img
                     src={`${consultor.url_photo}`}
                     alt={`${consultor.surname}`}

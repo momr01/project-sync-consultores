@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/authProvider";
-import { Loading, withRole } from "../components";
-import { colConsultorPage } from "../helpers/static";
+import { ConsultorBio, ConsultorTable, Loading, withRole } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
@@ -33,12 +32,12 @@ const User = () => {
   const consultor = useSelector(selectOneEmpToEdit);
 
   return (
-    <div className="fondo_gradient_grey overflow-auto">
+    <div className="overflow-auto mx-5 ss:mx-0">
       <section className="flex flex-col font-poppins container mx-auto page-height">
-        <div className="flex justify-around">
+        <div className="ss:flex ss:justify-around">
           {consultor?.name ? (
-            <div className="flex justify-center my-10">
-              <h2 className="text-2xl my-auto">{`${consultor.name} ${consultor.surname}`}</h2>
+            <div className="flex ss:justify-center ss:my-10 my-3">
+              <h2 className="ss:text-2xl text-xl my-auto">{`${consultor.name} ${consultor.surname}`}</h2>
               <span className="text-lg my-auto mx-5">-</span>
               <p className="text-lg my-auto">{consultor.division}</p>
             </div>
@@ -46,16 +45,16 @@ const User = () => {
             <Loading />
           )}
 
-          <div className="my-auto">
+          <div className="ss:my-auto mb-5">
             <Link to={`/consultor/cons/edit/${consultor._id}`}>
               Editar datos
             </Link>
           </div>
         </div>
 
-        <div className="flex justify-center">
+        <div className="ss:flex ss:justify-center">
           {consultor?.name ? (
-            <div className="w-[30%]">
+            <div className="ss:w-[30%] mx-auto ss:mx-0">
               <img
                 src={`${consultor.url_photo}`}
                 alt="profile"
@@ -70,65 +69,23 @@ const User = () => {
             <Loading />
           )}
 
-          {consultor?.name ? <Biography consultor={consultor} /> : <Loading />}
+          {consultor?.name ? (
+            <ConsultorBio consultor={consultor} />
+          ) : (
+            <Loading />
+          )}
         </div>
 
         <hr className="my-10" />
 
         {consultor?.name ? (
-          <div>
-            <table className="w-full mt-10 rounded-md mb-10">
-              <thead className="bg-gray-50 border-b-2 border-gray-200">
-                <tr>
-                  {colConsultorPage.map((col) => (
-                    <th
-                      className="p-3 text-sm font-semibold tracking-wide text-left"
-                      key={col.key}
-                    >
-                      {col.title}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                <tr className="odd:bg-white even:bg-slate-200">
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {consultor.name}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {consultor.surname}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {consultor.phone}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {consultor.division}
-                  </td>
-                  <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {consultor.email}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="overflow-auto">
+            <ConsultorTable consultor={consultor} />
           </div>
         ) : (
           <Loading />
         )}
       </section>
-    </div>
-  );
-};
-
-const Biography = ({ consultor }) => {
-  return (
-    <div className="w-[50%]">
-      <div className="flex">
-        <h2 className="text-lg font-bold my-auto mr-5">Biografía</h2>
-      </div>
-
-      <div className="leading-7 text-justify italic text-[12px]">
-        {consultor?.biography}
-      </div>
     </div>
   );
 };

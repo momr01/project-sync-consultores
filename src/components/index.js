@@ -1,4 +1,6 @@
+export { default as ConsultorBio } from "./ConsultorBio";
 export { default as ConsultorDataForm } from "./forms/ConsultorDataForm";
+export { default as ConsultorTable } from "./ConsultorTable";
 export { default as Footer } from "./Footer";
 export { default as HeaderAdmin } from "./HeaderAdmin";
 export { default as Layout } from "./layouts/Layout";

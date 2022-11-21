@@ -47,7 +47,7 @@ const LoginForm = () => {
       >
         {formLoginData.map((input) => (
           <div className="mb-12" key={input.key}>
-            <div className="space-y-2 flex justify-between">
+            <div className="space-y-2 ss:flex ss:justify-between">
               <label className={formLogin.label}>{input.label}</label>
               <input
                 type={`${input.type}`}
@@ -59,7 +59,7 @@ const LoginForm = () => {
                 })}
                 className={`${
                   errors?.[input.regist] && "border-[3px] border-red-500"
-                } w-[60%] py-1.5 rounded-md focus:outline-none pl-3`}
+                } ss:w-[60%] w-full ss:py-1.5 py-2 rounded-md focus:outline-none pl-3`}
               />
             </div>
             <div className="relative">
