@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useLocation } from "react-router-dom";
@@ -13,11 +13,13 @@ import {
 import routes from "../../helpers/routes";
 import { formData } from "../../helpers/static";
 import { formCrud } from "../../style";
-import { Loading } from "../index";
+import { Loading, FormBase } from "../index";
 
 const ManageConsForm = ({ add, setIsOpen }) => {
   const dispatch = useDispatch();
   const history = useLocation();
+
+  const [division, setDivision] = useState();
 
   /**
    *
@@ -56,6 +58,10 @@ const ManageConsForm = ({ add, setIsOpen }) => {
   const changesSaved = useSelector(selectChangesSaved);
   const data = useSelector(selectOneEmpToEdit);
 
+  useEffect(() => {
+    setDivision(add ? "" : data.division);
+  }, [add, data]);
+
   /**
    * se definen los valores por defecto del formulario
    */
@@ -77,7 +83,7 @@ const ManageConsForm = ({ add, setIsOpen }) => {
         : "Cargando..."
       : "";
     defaultValues.division = !add ? `${data?.division}` : "Software Factory";
-    defaultValues.subdivision = !add ? `${data?.subdivision}` : "Front-end";
+    defaultValues.subdivision = !add ? `${data?.subdivision}` : "Frontend";
     defaultValues.email = !add
       ? data?.email
         ? `${data?.email}`
@@ -90,6 +96,10 @@ const ManageConsForm = ({ add, setIsOpen }) => {
       : "";
     reset({ ...defaultValues });
   }, [reset, data, add]);
+
+  const handleDivision = (data) => {
+    setDivision(data.target.value);
+  };
 
   const onSubmit = (dataForm) => {
     const dataCompleted = {
@@ -128,34 +138,23 @@ const ManageConsForm = ({ add, setIsOpen }) => {
           )}
         </h2>
         {!add && (
-          <Link className="ss:my-auto mb-5 hover:underline ss:order-2 order-1 ml-3 ss:ml-0" to={routes.home}>
+          <Link
+            className="ss:my-auto mb-5 hover:underline ss:order-2 order-1 ml-3 ss:ml-0"
+            to={routes.home}
+          >
             Volver
           </Link>
         )}
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className={formCrud.form}>
-        {formData.map(({ key, label, type, placeholder, regist }) => (
-          <div key={key}>
-            <div className={formCrud.divInput}>
-              <label className={formCrud.label}>{label}</label>
-              <input
-                type={`${type}`}
-                placeholder={`${placeholder}`}
-                {...register(`${regist}`, { required: true })}
-                className={`${formCrud.input} ${
-                  errors?.[regist] &&
-                  "rounded-md border-red-500 focus:outline-red-500"
-                }`}
-              />
-            </div>
-            <div className="relative">
-              {errors?.[regist] && (
-                <span className="absolute mt-[-10px] right-0 text-xs text-red-500 font-bold">
-                  Este campo es requerido.
-                </span>
-              )}
-            </div>
-          </div>
+        {formData.map((input, index) => (
+          <FormBase
+            key={index}
+            data={input}
+            styles={formCrud}
+            register={register}
+            errors={errors}
+          />
         ))}
 
         <div className={formCrud.divInput}>
@@ -163,6 +162,7 @@ const ManageConsForm = ({ add, setIsOpen }) => {
           <select
             {...register("division", { required: true })}
             className={formCrud.input}
+            onChange={handleDivision}
           >
             <option>Software Factory</option>
             <option>SAP</option>
@@ -175,11 +175,20 @@ const ManageConsForm = ({ add, setIsOpen }) => {
             className={formCrud.input}
             {...register("subdivision", { required: true })}
           >
-            <option value="MM">MM</option>
-            <option value="SAP2">SAP2</option>
-            <option value="SAP3">SAP3</option>
-            <option value="Front-end">Front-end</option>
-            <option value="Back-end">Back-end</option>
+            {division === "SAP" ? (
+              <>
+                <option value="MM">MM</option>
+                <option value="SD">SD</option>
+                <option value="ABAP">ABAP</option>
+              </>
+            ) : (
+              <>
+                <option value="Frontend">Frontend</option>
+                <option value="Backend">Backend</option>
+                <option value="Database">Database</option>
+                <option value="Devops">Devops</option>
+              </>
+            )}
           </select>
         </div>
         <div className={formCrud.divBtn}>

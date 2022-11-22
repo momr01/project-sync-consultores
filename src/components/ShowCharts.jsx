@@ -1,12 +1,16 @@
 import { useEffect } from "react";
 import Chart from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllEmployees, selectEmpItems, selectModalState } from "../app/EmployeesSlice";
+import {
+  fetchAllEmployees,
+  selectEmpItems,
+  selectModalState,
+} from "../app/EmployeesSlice";
 
 const ShowCharts = () => {
   const dispatch = useDispatch();
 
-  const modalState = useSelector(selectModalState)
+  const modalState = useSelector(selectModalState);
   /**
    * obtener desde la DB todos los empleados
    */
@@ -14,7 +18,9 @@ const ShowCharts = () => {
     dispatch(fetchAllEmployees());
   }, [dispatch, modalState]);
 
-  const employees = useSelector(selectEmpItems);
+  const employees = useSelector(selectEmpItems).filter(
+    (emp) => emp.role !== "admin"
+  );
 
   /**
    * filtrado y asignacion de divisiones
@@ -32,11 +38,9 @@ const ShowCharts = () => {
    */
   const subdSAP = [];
   const totalMM = employees.filter((emp) => emp.subdivision === "MM").length;
-  const totalSAP2 = employees.filter(
-    (emp) => emp.subdivision === "SAP2"
-  ).length;
+  const totalSAP2 = employees.filter((emp) => emp.subdivision === "SD").length;
   const totalSAP3 = employees.filter(
-    (emp) => emp.subdivision === "SAP3"
+    (emp) => emp.subdivision === "ABAP"
   ).length;
   subdSAP.push(totalMM);
   subdSAP.push(totalSAP2);
@@ -47,13 +51,21 @@ const ShowCharts = () => {
    */
   const subdSF = [];
   const totalFrontend = employees.filter(
-    (emp) => emp.subdivision === "Front-end"
+    (emp) => emp.subdivision === "Frontend"
   ).length;
   const totalBackend = employees.filter(
-    (emp) => emp.subdivision === "Back-end"
+    (emp) => emp.subdivision === "Backend"
+  ).length;
+  const totalDB = employees.filter(
+    (emp) => emp.subdivision === "Database"
+  ).length;
+  const totalDevops = employees.filter(
+    (emp) => emp.subdivision === "Devops"
   ).length;
   subdSF.push(totalFrontend);
   subdSF.push(totalBackend);
+  subdSF.push(totalDB);
+  subdSF.push(totalDevops);
 
   return (
     <>
@@ -82,7 +94,7 @@ const ShowCharts = () => {
               options={{
                 title: { text: "Sub-división SAP" },
                 noData: { text: "Empty Data" },
-                labels: ["MM", "SAP2", "SAP3"],
+                labels: ["MM", "SD", "ABAP"],
               }}
             ></Chart>
           </div>
@@ -94,7 +106,7 @@ const ShowCharts = () => {
               options={{
                 title: { text: "Sub-división SF" },
                 noData: { text: "Empty Data" },
-                labels: ["Front-end", "Back-end"],
+                labels: ["Frontend", "Backend", "Database", "Devops"],
               }}
             ></Chart>
           </div>

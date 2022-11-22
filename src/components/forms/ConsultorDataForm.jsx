@@ -13,6 +13,7 @@ import { useAuth } from "../../auth/authProvider";
 import routes from "../../helpers/routes";
 import { editConsultor } from "../../helpers/static";
 import { formCrud } from "../../style";
+import { FormBase } from "../index";
 
 const ConsultorDataForm = () => {
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ const ConsultorDataForm = () => {
       phone: dataForm.phone,
       url_photo:
         dataForm.url_photo.length === 1
-          ? `./img/${dataForm.url_photo[0].name}`
+          ? `/img/${dataForm.url_photo[0].name}`
           : consultor.url_photo,
       biography: dataForm.biography,
       name: consultor.name,
@@ -115,29 +116,14 @@ const ConsultorDataForm = () => {
             </div>
 
             <div className="md:w-[50%] sm:w-[80%] w-[100%] md:border-l-2 sm:px-10 md:order-2 order-1 mx-auto">
-              {editConsultor.map((input) => (
-                <div key={input.key}>
-                  <div className={formCrud.divInput}>
-                    <label className={formCrud.label}>{input.label}</label>
-                    <input
-                      type={`${input.type}`}
-                      placeholder={`${input.placeholder}`}
-                      {...register(`${input.regist}`, { required: true })}
-                      className={`${formCrud.input} ${
-                        errors?.[input.regist] &&
-                        "rounded-md border-red-500 focus:outline-red-500"
-                      }`}
-                      disabled={input.isDisabled}
-                    />
-                  </div>
-                  <div className="relative">
-                    {errors?.[input.regist] && (
-                      <span className="absolute mt-[-10px] right-0 text-xs text-red-500 font-bold">
-                        Este campo es requerido.
-                      </span>
-                    )}
-                  </div>
-                </div>
+              {editConsultor.map((input, index) => (
+                <FormBase
+                  key={index}
+                  data={input}
+                  styles={formCrud}
+                  register={register}
+                  errors={errors}
+                />
               ))}
             </div>
           </div>

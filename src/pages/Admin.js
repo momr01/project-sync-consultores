@@ -57,7 +57,7 @@ const Admin = () => {
 
         <Layout
           className={`site-layout ${
-            expandir ? "ml-[160px]" : "ml-[60px]"
+            expandir ? "ml-[160px]" : "ml-[60px] sm:ml-[90px]"
           } transition-all duration-1000`}
         >
           <Content className="overflow-auto page-height">

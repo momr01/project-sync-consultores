@@ -5,6 +5,7 @@ import { useAuth } from "../../auth/authProvider";
 import { formLogin } from "../../style";
 import { formLoginData } from "../../helpers/static";
 import { fetchAllEmployees, selectEmpItems } from "../../app/EmployeesSlice";
+import { FormBase } from "../index";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -40,68 +41,38 @@ const LoginForm = () => {
   };
 
   return (
-    <>
-      <form
-        className="flex flex-col md:w-[50%] w-[90%] mx-auto mt-20 font-poppins"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        {formLoginData.map((input) => (
-          <div className="mb-12" key={input.key}>
-            <div className="space-y-2 ss:flex ss:justify-between">
-              <label className={formLogin.label}>{input.label}</label>
-              <input
-                type={`${input.type}`}
-                {...register(`${input.regist}`, {
-                  required: input.isRequired,
-                  pattern: input.isPattern,
-                  maxLength: input.isMaxLength,
-                  minLength: input.isMinLength,
-                })}
-                className={`${
-                  errors?.[input.regist] && "border-[3px] border-red-500"
-                } ss:w-[60%] w-full ss:py-1.5 py-2 rounded-md focus:outline-none pl-3`}
-              />
-            </div>
-            <div className="relative">
-              {errors[input.regist]?.type === "required" && (
-                <span className={formLogin.errorInputs}>
-                  Este campo es requerido.
-                </span>
-              )}
-              {errors[input.regist]?.type === "pattern" && (
-                <span className={formLogin.errorInputs}>
-                  Debe ingresar un email válido.
-                </span>
-              )}
-              {(errors[input.regist]?.type === "minLength" ||
-                errors[input.regist]?.type === "maxLength") && (
-                <span className={formLogin.errorInputs}>
-                  La contraseña debe tener 8 caracteres.
-                </span>
-              )}
-            </div>
+    <form
+      className="flex flex-col md:w-[50%] w-[90%] mx-auto mt-20 font-poppins"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {formLoginData.map((input, index) => (
+        <FormBase
+          key={index}
+          data={input}
+          styles={formLogin}
+          register={register}
+          errors={errors}
+        />
+      ))}
+
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="btn bg-secondary w-full py-3 text-lg font-semibold hover:bg-primary hover:text-secondary text-primary p-2 rounded-lg"
+        >
+          Iniciar Sesión
+        </button>
+      </div>
+      <div className="relative">
+        {errorLogin && (
+          <div className="xl:absolute border-2 mt-8 bg-red-200 text-red-500 rounded-lg md:text-lg font-bold text-center py-[4px]">
+            Error al intentar ingresar. Por favor verifique los datos.
           </div>
-        ))}
+        )}
+      </div>
 
-        <div className="flex justify-center">
-          <button
-            type="submit"
-            className="btn bg-secondary w-full py-3 text-lg font-semibold hover:bg-primary hover:text-secondary text-primary p-2 rounded-lg"
-          >
-            Iniciar Sesión
-          </button>
-        </div>
-        <div className="relative">
-          {errorLogin && (
-            <div className="xl:absolute border-2 mt-8 bg-red-200 text-red-500 rounded-lg md:text-lg font-bold text-center py-[4px]">
-              Error al intentar ingresar. Por favor verifique los datos.
-            </div>
-          )}
-        </div>
-
-        <hr className="my-10 border-1" />
-      </form>
-    </>
+      <hr className="my-10 border-1" />
+    </form>
   );
 };
 

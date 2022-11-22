@@ -26,7 +26,7 @@ const SiderAdmin = ({ expandir, setExpandir, setIsOpen, setShowCharts }) => {
   return (
     <div
       className={`page-height bg-primary absolute transition-all duration-1000 ${
-        expandir ? "w-[150px]" : "w-[50px]"
+        expandir ? "w-[150px]" : "w-[50px] sm:w-[80px]"
       }`}
     >
       <div className="relative h-full">
@@ -34,21 +34,21 @@ const SiderAdmin = ({ expandir, setExpandir, setIsOpen, setShowCharts }) => {
           onClick={openList}
           className="text-white w-full p-4 flex justify-between hover:bg-secondary border-b-2 border-secondary"
         >
-          <TeamOutlined className="my-auto" />
+          <TeamOutlined className={`my-auto ${!expandir && "mx-auto" }`} />
           {expandir && <span>Listar todos</span>}
         </button>
         <button
           onClick={openModal}
           className="text-white w-full p-4 flex justify-between hover:bg-secondary border-b-2 border-secondary"
         >
-          <UserOutlined className="my-auto" />
+          <UserOutlined className={`my-auto ${!expandir && "mx-auto" }`} />
           {expandir && <span>Agregar nuevo</span>}
         </button>
         <button
           onClick={openCharts}
           className="text-white w-full p-4 flex justify-between hover:bg-secondary border-b-2 border-secondary"
         >
-          <PieChartOutlined className="my-auto" />
+          <PieChartOutlined className={`my-auto ${!expandir && "mx-auto" }`} />
           {expandir && <span>Gráficos</span>}
         </button>
         <div className="absolute bottom-0 w-full">

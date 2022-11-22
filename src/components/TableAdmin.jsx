@@ -10,6 +10,7 @@ import { colAdminPage } from "../helpers/static";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import routes from "../helpers/routes";
+import Loading from "./Loading";
 
 const TableAdmin = () => {
   const dispatch = useDispatch();
@@ -49,39 +50,43 @@ const TableAdmin = () => {
 
   return (
     <>
-      <table className="w-full mt-10 rounded-md">
-        <thead className="bg-gray-50 border-b-2 border-gray-200">
-          <tr>
-            {colAdminPage.map((col) => (
-              <th
-                className="p-3 text-sm font-semibold tracking-wide text-left"
-                key={col.key}
-              >
-                {col.title}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100">
-          {empleadosSearch.length > 0
-            ? empleadosSearch.map((cons, index) => (
-                <TrTable
-                  key={index}
-                  empleado={cons}
-                  index={index}
-                  deleteFunc={deleteConsultor}
-                />
-              ))
-            : empleados.map((cons, index) => (
-                <TrTable
-                  key={index}
-                  empleado={cons}
-                  index={index}
-                  deleteFunc={deleteConsultor}
-                />
+      {empleados.length > 0 || empleadosSearch.length > 0 ? (
+        <table className="w-full mt-10 rounded-md">
+          <thead className="bg-gray-50 border-b-2 border-gray-200">
+            <tr>
+              {colAdminPage.map((col) => (
+                <th
+                  className="p-3 text-sm font-semibold tracking-wide text-left"
+                  key={col.key}
+                >
+                  {col.title}
+                </th>
               ))}
-        </tbody>
-      </table>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {empleadosSearch.length > 0
+              ? empleadosSearch.map((cons, index) => (
+                  <TrTable
+                    key={index}
+                    empleado={cons}
+                    index={index}
+                    deleteFunc={deleteConsultor}
+                  />
+                ))
+              : empleados.map((cons, index) => (
+                  <TrTable
+                    key={index}
+                    empleado={cons}
+                    index={index}
+                    deleteFunc={deleteConsultor}
+                  />
+                ))}
+          </tbody>
+        </table>
+      ) : (
+        <Loading />
+      )}
     </>
   );
 };
@@ -99,6 +104,9 @@ const TrTable = ({ empleado, index, deleteFunc }) => (
     </td>
     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
       {empleado.division}
+    </td>
+    <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
+      {empleado.subdivision}
     </td>
     <td className="p-3 text-sm text-gray-700 whitespace-nowrap">
       {empleado.email}
