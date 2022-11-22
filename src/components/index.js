@@ -9,6 +9,7 @@ export { default as LoginForm } from "./forms/LoginForm";
 export { default as ManageConsForm } from "./forms/ManageConsForm";
 export { default as Modales } from "./Modales";
 export { default as Navbar } from "./Navbar";
+export { default as SiderAdmin } from "./SiderAdmin";
 export { default as ShowCharts } from "./ShowCharts";
 export { default as TableAdmin } from "./TableAdmin";
 export { default as withRole } from "./layouts/withRole";
