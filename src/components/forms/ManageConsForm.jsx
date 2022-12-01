@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import {
+  addEmployee,
   fetchAllEmployees,
   fetchOneEmployeeToEdit,
   selectChangesSaved,
@@ -116,10 +117,11 @@ const ManageConsForm = ({ add, setIsOpen }) => {
     };
 
     if (add) {
-      dispatch(setAddEmployee(dataCompleted));
-      dispatch(fetchAllEmployees());
-      reset();
-      setIsOpen();
+      //dispatch(setAddEmployee({dataCompleted, reset, setIsOpen}));
+      dispatch(addEmployee(dataCompleted, reset, setIsOpen));
+      // dispatch(fetchAllEmployees());
+      // // reset();
+      // // setIsOpen();
     } else {
       dispatch(setEditEmployee({ id: data._id, data: dataCompleted }));
     }

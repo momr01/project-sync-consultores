@@ -59,44 +59,6 @@ const EmployeesSlice = createSlice({
      *
      * @param {*} state
      * @param {*} action
-     * reducer para agregar un nuevo empleado a la DB
-     */
-    setAddEmployee: (state, action) => {
-      const addEmployee = axios
-        .post(`${URL}`, action.payload)
-        .then((response) => {
-          // if (response.statusText === "OK") {
-          // toast.success(`Empleado agregado`, {
-          //   style: {
-          //     borderRadius: "10px",
-          //     fontSize: "1.3rem",
-          //     background: "#CCF6B6",
-          //     color: "#000",
-          //   },
-          // });
-          // }
-        })
-        .catch((err) => console.log(err));
-
-      toast.promise(
-        addEmployee,
-        {
-          loading: "Agregando empleado",
-          success: "Empleado agregado exitosamente!",
-          error: "ERROR! No se pudo agregar el empleado...",
-        },
-        {
-          style: {
-            fontSize: "1.3rem",
-            textAlign: "center",
-          },
-        }
-      );
-    },
-    /**
-     *
-     * @param {*} state
-     * @param {*} action
      * reducer para editar un empleado desde el perfil del admin o personal de RRHH
      * implica la posibilidad de modificar todos los campos disponibles
      */
@@ -134,17 +96,7 @@ const EmployeesSlice = createSlice({
         } else {
           const updateEmployee = axios
             .put(`${URL}/${action.payload.id}`, action.payload.data)
-            .then((response) => {
-              // toast.success(`Se actualizaron los datos del consultor`, {
-              //   style: {
-              //     borderRadius: "10px",
-              //     fontSize: "1.3rem",
-              //     background: "#CCF6B6",
-              //     color: "#000",
-              //   },
-              // });
-              //}
-            })
+            .then(() => {})
             .catch((err) => console.log(err));
           toast.promise(
             updateEmployee,
@@ -222,7 +174,6 @@ const EmployeesSlice = createSlice({
 
 export const {
   setEmployeesList,
-  setAddEmployee,
   setOneEmployee,
   setEditEmployee,
   setSearchItems,
@@ -354,18 +305,9 @@ export const updateOneEmployee =
         } else {
           const updateEmployee = axios
             .put(`${URL}/${id}`, data)
-            .then((response) => {
+            .then(() => {
               dispatch(setOneEmployeeToEdit({ id }));
-              //dispatch(setModalState());
               dispatch(setChangesSaved());
-              // toast.success(`Se actualizaron los datos del consultor`, {
-              //   style: {
-              //     borderRadius: "10px",
-              //     fontSize: "1.3rem",
-              //     background: "#CCF6B6",
-              //     color: "#000",
-              //   },
-              // });
             })
             .catch((err) => console.log(err));
 
@@ -387,3 +329,30 @@ export const updateOneEmployee =
       })
       .catch((err) => console.log(err));
   };
+
+export const addEmployee = (dataCompleted, reset, setIsOpen) => () => {
+  const addEmployee = axios
+    .post(`${URL}`, dataCompleted)
+    .then((response) => {
+      if (response.status === 200) {
+        reset();
+        setIsOpen();
+      }
+    })
+    .catch((err) => console.log(err));
+
+  toast.promise(
+    addEmployee,
+    {
+      loading: "Agregando empleado",
+      success: "Empleado agregado exitosamente!",
+      error: "ERROR! No se pudo agregar el empleado...",
+    },
+    {
+      style: {
+        fontSize: "1.3rem",
+        textAlign: "center",
+      },
+    }
+  );
+};
